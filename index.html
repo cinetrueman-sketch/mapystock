@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>제니스로보틱스 - Mpay 증권</title>
+<style>
+:root{
+  --red:#e8382e; --blue:#2679ed; --green:#00c473;
+  --line:#e8eaed; --line2:#f1f3f5;
+  --txt:#1a1a1a; --gray:#767b83; --gray2:#a3a8af;
+  --bg:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}   /* iOS 자동 글자 확대 방지 */
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","맑은 고딕",Roboto,sans-serif;
+  color:var(--txt); background:#fff; font-size:13px; -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+/* PC 기준 폭을 고정한 뒤 화면 크기에 맞춰 통째로 축소한다 (비율 100% 보존) */
+#stage{width:1440px;transform-origin:top left;will-change:transform}
+#stageSpacer{width:100%}
+a{color:inherit;text-decoration:none}
+.up{color:var(--red)} .down{color:var(--blue)}
+
+/* ============ GNB ============ */
+.gnb{height:56px;display:flex;align-items:center;padding:0 22px;gap:18px;border-bottom:1px solid var(--line2)}
+.logo{display:flex;align-items:center;gap:6px;font-weight:800;font-size:19px;letter-spacing:-.5px;position:relative}
+.logo .m{width:23px;height:23px;border-radius:50%;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800}
+.logo .beta{font-size:11px;color:var(--gray2);font-weight:600;font-style:italic;margin-left:1px}
+.logo .adtag{position:absolute;top:34px;left:16px;background:#f1f3f5;color:#8b9099;font-size:10px;padding:2px 6px;border-radius:3px;font-weight:600}
+.search{flex:0 0 380px;height:36px;border:1px solid #e3e6ea;border-radius:18px;display:flex;align-items:center;gap:8px;padding:0 16px;color:var(--gray2);font-size:13.5px;background:#fff}
+.gnb-center{flex:1;display:flex;justify-content:center;gap:26px;font-size:14px;font-weight:600;color:#4a4f57}
+.gnb-center .item{display:flex;align-items:center;gap:6px}
+.gnb-center .item.on{color:#00b25d}
+.ic{width:17px;height:17px;border-radius:4px;background:#eef1f4;display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:#8b9099}
+.gnb-right{display:flex;align-items:center;gap:14px;font-size:13px;color:#4a4f57}
+.btn-outline{height:34px;border:1px solid #e3e6ea;border-radius:17px;padding:0 15px;display:flex;align-items:center;gap:6px;font-weight:600;font-size:13px;color:#4a4f57}
+.divider{width:1px;height:16px;background:var(--line)}
+.avatar{width:22px;height:22px;border-radius:50%;background:#dfe3e8}
+.badge{width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.circ{width:20px;height:20px;border-radius:50%;border:1.6px solid #b6bbc2}
+
+/* ============ 2nd nav ============ */
+.subnav{height:44px;display:flex;align-items:center;padding:0 22px;gap:30px;border-bottom:1px solid var(--line);font-size:15px;color:#5a5f66;font-weight:600}
+.subnav .on{color:#111;font-weight:800;position:relative}
+.subnav .on:after{content:"";position:absolute;left:-2px;right:-2px;bottom:-13px;height:2.5px;background:#111}
+.subnav-right{margin-left:auto;display:flex;align-items:center;gap:12px;font-size:12.5px;color:var(--gray)}
+.subnav-right .notice{color:#a3a8af;font-weight:600}
+.subnav-right .txt{color:#3a3f46;font-weight:500;max-width:230px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ============ layout ============ */
+.wrap{display:flex;align-items:flex-start}
+.left{width:298px;flex:0 0 298px;border-right:1px solid var(--line);padding:14px 20px 40px}
+.center{flex:1;min-width:0;padding:10px 20px 40px}
+.right{width:330px;flex:0 0 330px;padding:16px 20px 40px}
+
+/* ============ left ============ */
+.crumb{color:var(--gray2);font-size:12.5px;margin-bottom:14px}
+.krx{display:flex;align-items:center;gap:0;margin-bottom:14px}
+.krx .tab{height:26px;padding:0 12px;border:1px solid #d8dce1;font-size:12px;font-weight:700;display:flex;align-items:center;color:#8b9099;background:#fff}
+.krx .tab:first-child{border-radius:4px 0 0 4px;color:#111;border-color:#111;position:relative;z-index:1}
+.krx .tab:last-child{border-radius:0 4px 4px 0;margin-left:-1px}
+.krx .icons{margin-left:auto;display:flex;gap:10px;color:#b6bbc2;font-size:17px}
+.stk-head{display:flex;gap:11px;align-items:flex-start}
+.stk-logo{width:44px;height:44px;border-radius:50%;background:#16266b;color:#fff;font-size:7.5px;font-weight:700;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.15;flex:0 0 44px;letter-spacing:-.3px}
+.stk-meta{font-size:12px;color:var(--gray);margin-bottom:2px}
+.stk-name{font-size:20px;font-weight:800;letter-spacing:-.6px}
+.stk-price{font-size:27px;font-weight:800;margin-top:9px;letter-spacing:-.8px}
+.stk-chg{font-size:14.5px;font-weight:700;margin-top:2px}
+.stk-time{font-size:11.5px;color:var(--gray2);margin-top:6px}
+.banner{margin-top:16px;background:#f2fbf6;border-radius:8px;height:46px;display:flex;align-items:center;gap:8px;padding:0 14px;font-size:13.5px;font-weight:600}
+.banner .arrow{margin-left:auto;color:#b6bbc2}
+.sec-title{margin-top:26px;font-size:15px;font-weight:800;display:flex;align-items:center;gap:4px}
+.sec-title span{color:#c4c9cf;font-weight:400}
+
+.slider{margin:20px 0 6px;position:relative;height:34px}
+.slider .bar{position:absolute;top:24px;left:0;right:0;height:4px;border-radius:2px;background:linear-gradient(90deg,#2679ed 0%,#dfe3e8 32%,#dfe3e8 100%)}
+.slider .dot{position:absolute;top:21px;left:6%;width:10px;height:10px;border-radius:50%;background:#111;border:2px solid #fff;box-shadow:0 0 0 1px #111}
+.slider .bub{position:absolute;top:0;left:7.5%;transform:translateX(-50%);background:#111;color:#fff;font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:4px}
+.slider .bub:after{content:"";position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);border-left:4px solid transparent;border-right:4px solid transparent;border-top:4px solid #111}
+.slider-lbl{display:flex;justify-content:space-between;font-size:11.5px;color:var(--gray);margin-top:12px}
+.slider-lbl b{display:block;color:#111;font-size:13px;font-weight:700;margin-top:2px}
+.slider-lbl .r{text-align:right}
+
+.tbl{width:100%;border-collapse:collapse;margin-top:14px}
+.tbl td{padding:7px 0;font-size:13px}
+.tbl td.k{color:var(--gray);width:52px}
+.tbl td.v{text-align:right;font-weight:600;padding-right:16px}
+.tbl td.v:last-child{padding-right:0}
+.note{font-size:11px;color:#b6bbc2;margin-top:12px;line-height:1.5}
+.industry{margin-top:16px;background:#f7f8f9;border-radius:8px;padding:12px 14px}
+.industry div{display:flex;justify-content:space-between;font-size:12.5px;padding:3px 0;color:var(--gray)}
+.industry div b{color:#111;font-weight:700}
+
+/* ============ center ============ */
+.tabs{display:flex;gap:24px;border-bottom:1px solid var(--line);padding:0 4px;font-size:14.5px;font-weight:600;color:#5a5f66}
+.tabs div{padding:10px 0 12px;position:relative}
+.tabs .on{color:#111;font-weight:800}
+.tabs .on:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2.5px;background:#111}
+
+.ad-banner{margin-top:16px;background:#fdf6ec;border-radius:8px;height:78px;display:flex;align-items:center;padding:0 20px;gap:18px;position:relative}
+.ad-banner .thumb{width:104px;height:56px;border-radius:6px;background:linear-gradient(135deg,#4a3a2c,#8a6a4a);display:flex;align-items:center;justify-content:center;color:#ffe9c9;font-size:10px;font-weight:700;text-align:center;line-height:1.3;letter-spacing:-.2px}
+.ad-banner .t1{font-size:16px;font-weight:800;letter-spacing:-.4px}
+.ad-banner .t2{font-size:12.5px;color:#7a6a58;margin-top:5px}
+.ad-banner .cta{margin-left:auto;background:#8a5a2b;color:#fff;font-size:13px;font-weight:700;padding:10px 18px;border-radius:20px}
+.ad-banner .adm{position:absolute;top:8px;right:10px;font-size:10px;color:#c0b3a3;font-weight:600}
+
+.chart-head{display:flex;align-items:center;gap:10px;margin-top:22px}
+.chart-head h2{font-size:20px;font-weight:800;margin-right:auto}
+.pill{height:30px;border:1px solid #e3e6ea;border-radius:6px;display:flex;align-items:center;padding:0 10px;font-size:12.5px;font-weight:600;color:#4a4f57;gap:5px}
+.seg{height:30px;display:flex;border-radius:6px;overflow:hidden}
+.seg div{width:34px;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:600;color:#5a5f66;border:1px solid #e3e6ea;margin-left:-1px}
+.seg div:first-child{margin-left:0;border-radius:6px 0 0 6px}
+.seg div:last-child{border-radius:0 6px 6px 0}
+.seg div.on{background:#eef1f4;color:#111;font-weight:800;border-color:#d5d9de;position:relative;z-index:1}
+.searchmini{width:150px;height:30px;border:1px solid #e3e6ea;border-radius:6px;display:flex;align-items:center;gap:6px;padding:0 10px;color:#b6bbc2;font-size:12.5px}
+.tools{display:flex;gap:14px;font-size:12.5px;color:#4a4f57;font-weight:600;align-items:center}
+
+.chartbox{margin-top:14px;border:1px solid var(--line);border-radius:10px;padding:16px 16px 8px;position:relative}
+.ohlc{font-size:12.5px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.ohlc b{font-weight:700}
+.linear{position:absolute;top:12px;right:16px;width:96px;height:30px;border:1px solid #e3e6ea;border-radius:6px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;font-size:12.5px;color:#4a4f57;background:#fff}
+.malegend{margin-top:14px;font-size:12px;color:#4a4f57}
+.malegend .nums{margin-top:4px;font-size:11.5px;line-height:1.65;color:#5a5f66;font-family:ui-monospace,Menlo,monospace}
+
+.lower{display:flex;gap:18px;margin-top:22px;align-items:flex-start}
+.panel{flex:1;min-width:0}
+.panel h3{font-size:17px;font-weight:800;display:flex;align-items:center;gap:7px}
+.panel h3 small{font-size:11.5px;color:#b6bbc2;font-weight:600}
+.panel h3 .prov{margin-left:auto;font-size:11.5px;color:#b6bbc2;font-weight:600}
+.panel h3 .chip{background:#111;color:#fff;font-size:11.5px;padding:3px 9px;border-radius:11px;font-weight:700}
+.panel h3 .chip.off{background:#f1f3f5;color:#8b9099}
+.dtbl{width:100%;border-collapse:collapse;margin-top:12px;font-size:12.5px}
+.dtbl th{color:var(--gray);font-weight:500;padding:9px 6px;border-bottom:1px solid var(--line);font-size:12px}
+.dtbl td{padding:9px 6px;border-bottom:1px solid var(--line2);text-align:right}
+.dtbl th:first-child,.dtbl td:first-child{text-align:left}
+.dtbl .mid{text-align:center;font-weight:700}
+.hoga-row td{position:relative}
+.hoga-bar{position:absolute;right:0;top:4px;bottom:4px;background:#eaf1fd;z-index:0;border-radius:2px}
+.hoga-row td span{position:relative;z-index:1}
+
+/* ============ right ============ */
+.rlist .row{display:flex;align-items:center;gap:10px;padding:11px 0}
+.rlist .ico{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:7px;color:#fff;font-weight:800;flex:0 0 24px;letter-spacing:-.2px}
+.rlist .nm{font-size:14px;font-weight:600}
+.rlist .pr{margin-left:auto;text-align:right}
+.rlist .pr .p{font-size:16px;font-weight:800;letter-spacing:-.3px}
+.rlist .pr .c{font-size:12px;font-weight:600;margin-top:2px}
+.more{width:100%;height:44px;border:1px solid #e3e6ea;border-radius:8px;background:#fff;font-size:14px;font-weight:700;color:#3a3f46;margin-top:12px}
+.adcard{margin-top:20px;border-radius:10px;overflow:hidden;position:relative;background:#0d0d10}
+.adcard .img{height:196px;background:radial-gradient(ellipse at 50% 62%,#5a5f6a 0%,#26272c 45%,#0d0d10 78%);display:flex;align-items:center;justify-content:center}
+.adcard .ring{width:120px;height:120px;border-radius:50%;border:22px solid rgba(225,228,233,.82);filter:blur(.4px);box-shadow:0 0 46px rgba(200,210,225,.35)}
+.adcard .adm{position:absolute;top:9px;right:10px;font-size:10px;color:#8a8f98;font-weight:600}
+.adcard .body{background:#fff;padding:14px 16px 16px;border:1px solid var(--line);border-top:none;border-radius:0 0 10px 10px}
+.adcard .brand{width:30px;height:30px;border-radius:50%;background:#111;color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:-30px 0 10px}
+.adcard .t1{font-size:15px;font-weight:800;letter-spacing:-.4px}
+.adcard .t2{font-size:12.5px;color:#6a6f77;margin-top:5px}
+.adcard .foot{display:flex;align-items:center;margin-top:12px}
+.adcard .foot .n{font-size:12.5px;color:#8b9099;font-weight:600}
+.adcard .foot .b{margin-left:auto;background:#8b9099;color:#fff;font-size:12px;font-weight:600;padding:7px 13px;border-radius:16px}
+
+/* ============ ticker ============ */
+.ticker{position:fixed;left:0;bottom:0;width:1440px;height:34px;background:#fafbfc;border-top:1px solid var(--line);display:flex;align-items:center;font-size:12px;overflow:hidden;transform-origin:bottom left;z-index:50}
+.ticker-track{display:flex;align-items:center;flex:0 0 auto;will-change:transform;animation:ticker-scroll 42s linear infinite}
+.ticker:hover .ticker-track{animation-play-state:paused}
+@keyframes ticker-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.ticker-track{animation:none}}
+.ticker .it{display:flex;align-items:center;gap:6px;white-space:nowrap;padding:0 22px}
+.ticker .it .n{color:#5a5f66}
+.ticker .it .v{font-weight:700}
+</style>
+</head>
+<body>
+
+<div id="stage">
+<!-- ============ GNB ============ -->
+<div class="gnb">
+  <div class="logo"><span class="m">M</span>pay 증권<span class="beta">Beta</span><span class="adtag">AD</span></div>
+  <div class="search">🔍 종목명·지수명 입력 (단축키⌘+K)</div>
+  <div class="gnb-center">
+    <div class="item"><span class="ic">₩</span>금융</div>
+    <div class="item"><span class="ic">P</span>포인트</div>
+    <div class="item"><span class="ic">▤</span>결제</div>
+    <div class="item on"><span class="ic" style="background:#e4f7ec;color:#00b25d">▲</span>증권</div>
+    <div class="item"><span class="ic">▣</span>부동산</div>
+  </div>
+  <div class="gnb-right">
+    <div class="btn-outline">↻ 기존 증권 보기</div>
+    <div class="divider"></div>
+    <div style="display:flex;align-items:center;gap:6px"><span class="avatar"></span>정준하 ▾</div>
+    <span class="circ"></span><span class="circ"></span>
+    <span class="badge">59</span>
+  </div>
+</div>
+
+<!-- ============ SUB NAV ============ -->
+<div class="subnav">
+  <div>홈</div><div class="on">국내</div><div>미국 · 글로벌</div><div>가상자산</div>
+  <div>시장지표</div><div>토론</div><div>뉴스</div><div>리서치</div><div>MY</div>
+  <div class="subnav-right"><span class="notice">공지</span><span class="divider"></span><span class="txt">새롭게 변화될 Mpay 증권 PC서…</span></div>
+</div>
+
+<div class="wrap">
+  <!-- ============ LEFT ============ -->
+  <div class="left">
+    <div class="crumb">‹ 국내 종목 / 주식</div>
+    <div class="krx">
+      <div class="tab">KRX</div><div class="tab">NXT</div>
+      <div class="icons"><span>🔔</span><span>☆</span></div>
+    </div>
+    <div class="stk-head">
+      <div class="stk-logo">제니스<br>로보틱스</div>
+      <div>
+        <div class="stk-meta">512340 코스닥 · 기계</div>
+        <div class="stk-name">제니스로보틱스</div>
+      </div>
+    </div>
+    <div class="stk-price">11,840<span style="font-size:19px">원</span></div>
+    <div class="stk-chg down">▼ 2,030 (-14.64%)</div>
+    <div class="stk-time">09. 15. 13:15 · 장중</div>
+
+    <div class="banner">📉 15% 이상 하락했어요 <span class="arrow">›</span></div>
+
+    <div class="sec-title">시세정보 <span>›</span></div>
+    <div class="slider">
+      <div class="bub">11,840</div>
+      <div class="bar" style="background:linear-gradient(90deg,#2679ed 0%,#dfe3e8 6%,#dfe3e8 100%)"></div>
+      <div class="dot"></div>
+    </div>
+    <div class="slider-lbl">
+      <div>52주 최저<b>10,950</b></div>
+      <div class="r">52주 최고<b>26,500</b></div>
+    </div>
+    <table class="tbl">
+      <tr><td class="k">전일</td><td class="v">13,870</td><td class="k">시가</td><td class="v down">13,530</td></tr>
+      <tr><td class="k">고가</td><td class="v down">13,760</td><td class="k">저가</td><td class="v down">11,520</td></tr>
+      <tr><td class="k">거래량</td><td class="v">703,682</td><td class="k">대금</td><td class="v">8,805백만</td></tr>
+    </table>
+    <div class="note">일별 시세 데이터는 한국거래소(KRX)에서 제공합니다.</div>
+
+    <div class="sec-title">투자정보 <span>›</span></div>
+    <table class="tbl">
+      <tr><td class="k">시총</td><td class="v">1,829억</td><td class="k" style="width:66px">외인소진율</td><td class="v">1.13%</td></tr>
+      <tr><td class="k">PER</td><td class="v">-11.86배</td><td class="k">EPS</td><td class="v">-998원</td></tr>
+      <tr><td class="k">추정PER</td><td class="v">N/A</td><td class="k">추정EPS</td><td class="v">N/A</td></tr>
+      <tr><td class="k">PBR</td><td class="v">3.39배</td><td class="k">BPS</td><td class="v">3,495원</td></tr>
+      <tr><td class="k">배당수익률</td><td class="v">N/A</td><td class="k">주당배당금</td><td class="v">N/A</td></tr>
+    </table>
+    <div class="note">PER, EPS, PBR, BPS 배당수익률 기준 ⓘ</div>
+    <div class="industry">
+      <div>동일업종 등락률 <b class="down">-2.76%</b></div>
+      <div>동일업종 PER <b>91.83배</b></div>
+    </div>
+  </div>
+
+  <!-- ============ CENTER ============ -->
+  <div class="center">
+    <div class="tabs">
+      <div class="on">차트·시세</div><div>🔥 토론</div><div>종목분석</div><div>리포트</div>
+      <div>뉴스·공시</div><div>공매도현황</div><div>인사이트</div>
+    </div>
+
+    <div class="ad-banner">
+      <span class="adm">AD</span>
+      <div class="thumb">LUMIÈRE<br>BRAND WEEK</div>
+      <div>
+        <div class="t1">뤼미에르 오디오 브랜드위크</div>
+        <div class="t2">에어웨이브5 출시 + 넥밴드 + 파우치 증정 최대혜택</div>
+      </div>
+      <div class="cta">지금 구매하기 ›</div>
+    </div>
+
+    <div class="chart-head">
+      <h2>차트</h2>
+      <div class="pill">30분 ▾</div>
+      <div class="seg"><div>일</div><div class="on">주</div><div>월</div><div>년</div></div>
+      <div class="searchmini">🔍 종목 비교</div>
+      <div class="tools"><span>📈 보조지표</span><span>✏️ 그리기</span><span>🗒 공시</span><span style="color:#b6bbc2">▮▮ ▾</span><span style="color:#b6bbc2">⤢</span></div>
+    </div>
+
+    <div class="chartbox">
+      <div class="ohlc">
+        <span>시 <b class="down">12,690</b></span>
+        <span>고 <b class="down">12,690</b></span>
+        <span>저 <b class="down">10,950</b></span>
+        <span>종 <b>11,840</b></span>
+        <span>0.00%</span>
+        <span>거 <b>5,317,950</b></span>
+      </div>
+      <div class="linear"><span>Linear</span><span style="color:#b6bbc2">▾</span></div>
+      <div class="malegend">
+        이동평균 <b style="color:#5a5f66">5 20 60 120</b> <span style="color:#c4c9cf">✕</span>
+        <div class="nums">
+          MA1 &nbsp;<span style="color:#00b25d">13,306.00</span><br>
+          MA2 &nbsp;<span style="color:#e8382e">20,779.37</span><br>
+          MA3 &nbsp;<span style="color:#e8a13a">21,187.87</span>
+        </div>
+      </div>
+      <div id="chart"></div>
+    </div>
+
+    <div class="lower">
+      <div class="panel">
+        <h3>호가 <small>20분지연</small> <span class="prov">KRX 제공 ⓘ</span></h3>
+        <table class="dtbl">
+          <tr><th>매도잔량</th><th style="text-align:center">호가</th><th>매수잔량</th></tr>
+          <tr class="hoga-row"><td><div class="hoga-bar" style="width:22%"></div><span class="down">112</span></td><td class="mid down">11,880 <small style="color:#8b9099">-14.35%</small></td><td></td></tr>
+          <tr class="hoga-row"><td><div class="hoga-bar" style="width:26%"></div><span class="down">129</span></td><td class="mid down">11,870 <small style="color:#8b9099">-14.42%</small></td><td></td></tr>
+          <tr class="hoga-row"><td><div class="hoga-bar" style="width:41%"></div><span class="down">209</span></td><td class="mid down">11,860 <small style="color:#8b9099">-14.49%</small></td><td></td></tr>
+          <tr class="hoga-row"><td><div class="hoga-bar" style="width:33%"></div><span class="down">167</span></td><td class="mid down">11,850 <small style="color:#8b9099">-14.56%</small></td><td></td></tr>
+        </table>
+      </div>
+      <div class="panel">
+        <h3><span style="font-size:17px">시세</span> <span class="chip">시간별</span><span class="chip off">일별</span> <span class="prov">KRX 제공 ⓘ</span></h3>
+        <table class="dtbl">
+          <tr><th>체결시각</th><th>체결가</th><th>체결량</th><th>전일대비</th></tr>
+          <tr><td>13:15</td><td>11,840</td><td>8,654주</td><td class="down">▼2,030</td></tr>
+          <tr><td>13:14</td><td>11,850</td><td>1,186주</td><td class="down">▼2,020</td></tr>
+          <tr><td>13:14</td><td>11,830</td><td>1,022주</td><td class="down">▼2,040</td></tr>
+          <tr><td>13:13</td><td>11,860</td><td>3,410주</td><td class="down">▼2,010</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ RIGHT ============ -->
+  <div class="right">
+    <div class="rlist" id="rlist"></div>
+    <button class="more">동일 업종 더보기</button>
+
+    <div class="adcard">
+      <span class="adm">AD</span>
+      <div class="img"><div class="ring"></div></div>
+      <div class="body">
+        <div class="brand">NOVA</div>
+        <div class="t1">환율은 올라도, 가격 부담은 OFF</div>
+        <div class="t2">완벽한 2세대 특별한 런칭 이벤트</div>
+        <div class="foot"><span class="n">NOVASONIC</span><span class="b">더 알아보기</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /#stage -->
+<div id="stageSpacer"></div>
+
+<!-- ============ TICKER (뷰포트 하단 고정 · 별도 스케일) ============ -->
+<div class="ticker" id="ticker"></div>
+
+<script>
+/* BAKED = 내보내기로 저장된 파일. 이미 그려진 내용을 덮어쓰지 않도록 생성기를 건너뛴다 */
+const BAKED = document.body.dataset.baked === '1';
+
+/* ---------- 뷰포트 맞춤 스케일 (아이패드 등 좁은 화면 대응) ---------- */
+const BASE_W = 1440;                       // PC 기준 폭
+window.__scale = 1;
+function fitToViewport(){
+  const stage=document.getElementById('stage');
+  const spacer=document.getElementById('stageSpacer');
+  const ticker=document.getElementById('ticker');
+  if(!stage) return;
+  const vw = document.documentElement.clientWidth;
+  const s  = Math.min(1, vw / BASE_W);
+  window.__scale = s;
+
+  // 흐름에서 빼고 spacer가 자리를 대신 차지 → 축소된 만큼만 스크롤되게
+  stage.style.position='absolute'; stage.style.top='0'; stage.style.left='0';
+  stage.style.transform = s===1 ? 'none' : `scale(${s})`;
+  spacer.style.height = (stage.offsetHeight * s) + 'px';   // offsetHeight = 미스케일 원본 높이
+
+  ticker.style.transform = s===1 ? 'none' : `scale(${s})`;
+  document.body.style.paddingBottom = (34*s) + 'px';
+}
+window.addEventListener('resize',fitToViewport);
+window.addEventListener('orientationchange',()=>setTimeout(fitToViewport,120));
+
+/* ---------- 우측 동일업종 리스트 (전부 가상 기업) ---------- */
+const peers=[
+ {n:"대성건설기계",p:"114,200",c:"▼4,100(-3.47%)",d:1,bg:"#00a05a",t:"DS"},
+ {n:"한울로보틱스",p:"55,400",c:"▼2,100(-3.65%)",d:1,bg:"#1a3f8f",t:"HW"},
+ {n:"서진엘리베이터",p:"66,500",c:"▲1,500(+2.31%)",d:0,bg:"#2e9e4f",t:"SJ"},
+ {n:"로보넥스",p:"158,400",c:"▼15,000(-8.65%)",d:1,bg:"#111",t:"RBX"},
+ {n:"태양무벡스",p:"19,350",c:"▼4,100(-17.48%)",d:1,bg:"#2e9e4f",t:"TY"},
+ {n:"금성벤드",p:"26,150",c:"▲1,150(+4.60%)",d:0,bg:"#d32f2f",t:"GS"},
+ {n:"하람로봇",p:"5,550",c:"▼410(-6.88%)",d:1,bg:"#00a58c",t:"HR"},
+];
+if(!BAKED) document.getElementById('rlist').innerHTML=peers.map(o=>`
+ <div class="row">
+   <div class="ico" style="background:${o.bg}">${o.t}</div>
+   <div class="nm">${o.n}</div>
+   <div class="pr"><div class="p">${o.p}</div><div class="c ${o.d?'down':'up'}">${o.c}</div></div>
+ </div>`).join('');
+
+/* ---------- 하단 지수 티커 ---------- */
+const idx=[
+ ["코스닥","644.78","▼ 17.90 (-2.70%)",1],
+ ["코스피 200","872.49","▼ 14.71 (-1.66%)",1],
+ ["다우존스","51,594.14","▼ 1,153.18 (-2.19%)",1],
+ ["S&P 500","7,316.15","▼ 112.63 (-1.52%)",1],
+ ["미국 USD","1,437.20","▼ 8.80 (-0.61%)",1],
+ ["나스닥 종합","24,442.94","▼ 433.97 (-1.74%)",1],
+ ["국제 금","4,057.60","▲ 21.30 (+0.53%)",0],
+];
+if(!BAKED)(function(){
+  const el=document.getElementById('ticker');
+  const one=idx.map(o=>
+    `<div class="it"><span class="n">${o[0]}</span><span class="v">${o[1]}</span><span class="${o[3]?'down':'up'}">${o[2]}</span></div>`).join('');
+
+  // 한 세트가 화면 너비보다 짧으면 끊겨 보이므로 채운 뒤, 그 묶음을 정확히 2배 복제 → -50% 이동 시 무한 루프
+  el.innerHTML=`<div class="ticker-track"><div class="ticker-set">${one}</div></div>`;
+  const track=el.firstElementChild, set=track.firstElementChild;
+  let reps=1;
+  while(set.offsetWidth*reps < el.offsetWidth && reps<12){reps++;}
+  const block=one.repeat(reps);
+  track.innerHTML=block+block;                      // 앞뒤 동일 → 이음새 없음
+  const half=track.scrollWidth/2;
+  track.style.animationDuration=(half/60).toFixed(1)+'s';   // 초당 60px 속도로 통일
+})();
+
+/* ---------- 캔들 차트 ---------- */
+if(!BAKED)(function(){
+  // 시드 난수
+  let s=20260812;
+  const rnd=()=>{s=(s*1664525+1013904223)%4294967296;return s/4294967296;};
+
+  // 추세 경로 (주봉 52개 = 2025.09.15 ~ 2026.09.15, 현재 시점 09.15 13:15)
+  //  1) i 0~41 : 상승 구간 12,800 → 26,500 (2026년 7월 초 고점)
+  //  2) i 41~51: 폭락 구간 26,500 → 11,840 (-55.32%), 반등 없이 계속 하락 중
+  const START=12800, TOP=26500, LAST=11840, PEAK_I=41;
+  const path=[];
+  for(let i=0;i<=PEAK_I;i++){
+    const t=i/PEAK_I;
+    const base=START+(TOP-START)*Math.pow(t,0.92);        // 완만하게 우상향
+    const wob=(i===0||i===PEAK_I) ? 0
+              : Math.sin(i*1.9)*base*0.028 + (rnd()-0.5)*base*0.022;  // 자연스러운 등락
+    // 고점(26,500)을 넘지 않도록 상단을 눌러 준다 → 최고가는 반드시 7월 초
+    path.push(i===PEAK_I ? TOP : Math.min(base+wob, TOP-320));
+  }
+  // 7월부터의 낙폭 — 초반이 가장 가파른 전형적 폭락
+  [24100,21600,19400,17600,16100,14900,13900,13200,12690,LAST]
+    .forEach(v=>path.push(v));
+
+  const W=1085,H=310,VH=110,PADL=8,PADR=112,PADT=18;
+  const n=path.length, cw=(W-PADL-PADR)/n;
+
+  let candles=[],prev=path[0];
+  for(let i=0;i<n;i++){
+    const close=path[i], open=prev;
+    // 꼬리는 몸통 밖으로 조금만 — 곡선이 흐트러지지 않게
+    const amp=Math.abs(close-open)*0.5+close*0.012;
+    let high=Math.max(open,close)+amp*rnd();
+    let low=Math.min(open,close)-amp*rnd();
+    if(i===PEAK_I){high=TOP;}                          // 7월 초 고점 = 52주 최고
+    if(i===51){high=12690;low=10950;}                  // 이번 주봉 (시 12,690 / 종 11,840 / 저 10,950 = 52주 최저)
+    candles.push({o:open,c:close,h:high,l:low,v:0.15+rnd()*0.5});
+    prev=close;
+  }
+  // 상승기엔 한산하다가 고점·폭락 구간에서 거래량이 터지는 형태
+  candles.forEach((d,i)=>{
+    d.v = i<PEAK_I ? 0.10+0.18*(i/PEAK_I)+d.v*0.16
+                   : 0.42+0.50*((i-PEAK_I)/(51-PEAK_I))+d.v*0.12;
+  });
+  candles[PEAK_I-1].v=0.72; candles[PEAK_I].v=0.95;    // 고점 분출
+  candles[PEAK_I+1].v=1.0;                              // 첫 폭락 주
+  candles[51].v=0.93;                                   // 현재 진행 중인 투매
+
+  const closes=candles.map(d=>d.c);
+  const ma=p=>closes.map((_,i)=>i<p-1?null:closes.slice(i-p+1,i+1).reduce((a,b)=>a+b)/p);
+  const ma5=ma(5),ma20=ma(20),ma60=ma(30);
+
+  const hi=30000, lo=2500;
+  const y=v=>PADT+(hi-v)/(hi-lo)*(H-PADT-14);
+  const x=i=>PADL+cw*i+cw/2;
+
+  let g='';
+  // 가격 눈금
+  [30000,25000,20000,15000,10000,5000].forEach(v=>{
+    g+=`<line x1="${PADL}" y1="${y(v)}" x2="${W-PADR}" y2="${y(v)}" stroke="#f4f5f7"/>`;
+    g+=`<text x="${W-PADR+10}" y="${y(v)+4}" font-size="11" fill="#a3a8af">${v.toLocaleString()}</text>`;
+  });
+  // MA
+  const line=(arr,col)=>{
+    let d='',st=false;
+    arr.forEach((v,i)=>{if(v==null)return;d+=(st?'L':'M')+x(i)+' '+y(v).toFixed(1);st=true;});
+    return `<path d="${d}" fill="none" stroke="${col}" stroke-width="1.3"/>`;
+  };
+  g+=line(ma5,'#3fb96b')+line(ma20,'#e8382e')+line(ma60,'#e8a13a');
+  // 캔들
+  const bw=Math.max(3,cw*0.62);
+  candles.forEach((d,i)=>{
+    const up=d.c>=d.o, col=up?'#e8382e':'#2679ed';
+    const t=y(Math.max(d.o,d.c)),b=y(Math.min(d.o,d.c));
+    g+=`<line x1="${x(i)}" y1="${y(d.h)}" x2="${x(i)}" y2="${y(d.l)}" stroke="${col}" stroke-width="1"/>`;
+    g+=`<rect x="${x(i)-bw/2}" y="${t}" width="${bw}" height="${Math.max(1.5,b-t)}" fill="${col}"/>`;
+  });
+  // 최고 마커 (7월 초 고점) — 라벨을 왼쪽으로 뻗어 우측 잘림 방지
+  g+=`<text x="${x(PEAK_I)-140}" y="${y(26500)-15}" font-size="11" fill="#767b83">최고</text>`;
+  g+=`<text x="${x(PEAK_I)-111}" y="${y(26500)-15}" font-size="11" fill="#3a3f46">26,500 (-55.32%)</text>`;
+  g+=`<path d="M${x(PEAK_I)-5},${y(26500)-11} L${x(PEAK_I)+5},${y(26500)-11} L${x(PEAK_I)},${y(26500)-3} Z" fill="#8b9099"/>`;
+  // 최저 마커 (곡선 종착점) — 라벨을 왼쪽으로 뻗음
+  g+=`<text x="${x(51)-126}" y="${y(10950)+35}" font-size="11" fill="#767b83">최저</text>`;
+  g+=`<text x="${x(51)-97}" y="${y(10950)+35}" font-size="11" fill="#3a3f46">10,950 (+8.13%)</text>`;
+  g+=`<path d="M${x(51)-5},${y(10950)+24} L${x(51)+5},${y(10950)+24} L${x(51)},${y(10950)+15} Z" fill="#8b9099"/>`;
+  // 현재가 태그
+  const cy=y(11840);
+  g+=`<path d="M${W-PADR},${cy} l7,-9 h58 v18 h-58 z" fill="#e8382e"/>`;
+  g+=`<text x="${W-PADR+38}" y="${cy+4}" font-size="11.5" font-weight="700" fill="#fff" text-anchor="middle">11,840</text>`;
+
+  // 거래량
+  const VT=H+16, vmax=1.05;
+  g+=`<text x="${PADL}" y="${VT+2}" font-size="12" fill="#4a4f57">거래량 5,317,950 <tspan fill="#c4c9cf">✕</tspan></text>`;
+  ['10.00m','7.50m','5.00m','2.50m'].forEach((t,k)=>{
+    const yy=VT+18+(k+0.2)*((VH-16)/4.4);
+    g+=`<text x="${W-PADR+10}" y="${yy}" font-size="10.5" fill="#a3a8af">${t}</text>`;
+  });
+  candles.forEach((d,i)=>{
+    const h=(d.v/vmax)*(VH-26), yy=VT+18+(VH-26-h);
+    g+=`<rect x="${x(i)-bw/2}" y="${yy}" width="${bw}" height="${h}" fill="${d.c>=d.o?'#e8382e':'#2679ed'}"/>`;
+  });
+  // 월 라벨
+  // 2025.09.15 기점 주봉 → 각 월 1일이 오는 주 인덱스
+  const months=[[0,'9월'],[2,'10월'],[7,'11월'],[11,'12월'],[15,'2026'],[20,'2월'],[24,'3월'],
+                [28,'4월'],[33,'5월'],[37,'6월'],[41,'7월'],[46,'8월'],[50,'9월']];
+  months.forEach(([i,t])=>{g+=`<text x="${x(i)}" y="${VT+VH+2}" font-size="11.5" fill="#5a5f66" text-anchor="middle" font-weight="600">${t}</text>`;});
+
+  document.getElementById('chart').innerHTML =
+    `<svg viewBox="0 0 ${W} ${VT+VH+12}" width="100%" xmlns="http://www.w3.org/2000/svg" style="display:block;margin-top:-58px">${g}</svg>`;
+})();
+</script>
+
+<!-- ============ 인라인 편집기 ============ -->
+<script>
+(function(){
+  /* ---------- 1. 일반 텍스트를 편집 가능한 span으로 감싸기 ---------- */
+  const SVG_NS='http://www.w3.org/2000/svg';
+  function wrapTextNodes(){
+    const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{
+      acceptNode(n){
+        if(!n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        for(let p=n.parentNode;p&&p!==document.body;p=p.parentNode){
+          if(p.nodeType!==1) continue;
+          const tag=p.tagName.toUpperCase();
+          if(tag==='SCRIPT'||tag==='STYLE'||tag==='TITLE') return NodeFilter.FILTER_REJECT;
+          if(p.namespaceURI===SVG_NS) return NodeFilter.FILTER_REJECT;   // SVG는 별도 처리
+          if(p.hasAttribute('data-editor-ui')) return NodeFilter.FILTER_REJECT;
+          if(p.classList.contains('ed')) return NodeFilter.FILTER_REJECT;
+        }
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    const list=[]; while(walker.nextNode()) list.push(walker.currentNode);
+    list.forEach(n=>{
+      const s=document.createElement('span');
+      s.className='ed';
+      n.parentNode.replaceChild(s,n);
+      s.appendChild(n);
+    });
+    return list.length;
+  }
+
+  /* ---------- 2. SVG(차트) 라벨은 오버레이 입력창으로 편집 ---------- */
+  function editSvgText(t){
+    const r=t.getBoundingClientRect();
+    const inp=document.createElement('input');
+    inp.setAttribute('data-editor-ui','');
+    inp.value=t.textContent;
+    /* font-size 16px 미만이면 iOS Safari가 포커스 시 화면을 확대해버리므로 16px 고정 */
+    const H=Math.max(30,r.height+12);
+    Object.assign(inp.style,{position:'fixed',
+      left:Math.min(Math.max(6,r.left-6),window.innerWidth-160)+'px',
+      top:Math.min(Math.max(6,r.top-(H-r.height)/2),window.innerHeight-H-6)+'px',
+      height:H+'px',width:Math.max(140,r.width+56)+'px',
+      font:'16px -apple-system,sans-serif',border:'1.5px solid #2679ed',borderRadius:'6px',
+      padding:'0 8px',zIndex:9999,background:'#fff',boxShadow:'0 3px 12px rgba(0,0,0,.18)'});
+    document.body.appendChild(inp);
+    inp.focus(); inp.select();
+    let cancelled=false;
+    const close=()=>{ if(!cancelled) t.textContent=inp.value; inp.remove(); };
+    inp.addEventListener('blur',close);
+    inp.addEventListener('keydown',e=>{
+      if(e.key==='Enter'){e.preventDefault();inp.blur();}
+      if(e.key==='Escape'){cancelled=true;inp.blur();}
+    });
+  }
+  function bindSvgText(){
+    const els=document.querySelectorAll('#chart svg text');
+    els.forEach(t=>{
+      if(t.dataset.bound) return;
+      t.dataset.bound='1';
+      t.style.cursor='text';
+      t.addEventListener('click',()=>{ if(document.body.classList.contains('editing')) editSvgText(t); });
+    });
+    return els.length;
+  }
+
+  /* ---------- 3. 편집 모드 on/off ---------- */
+  function setEditing(on){
+    document.body.classList.toggle('editing',on);
+    document.querySelectorAll('span.ed').forEach(s=>s.setAttribute('contenteditable',on?'true':'false'));
+    btnEdit.textContent = on ? '✓ 편집 중 (클릭해 종료)' : '✎ 편집 모드';
+    btnEdit.classList.toggle('on',on);
+  }
+
+  /* ---------- 4. 수정본 HTML 내보내기 ---------- */
+  function exportHTML(){
+    document.activeElement && document.activeElement.blur();
+    const root=document.documentElement.cloneNode(true);
+    root.querySelectorAll('[data-editor-ui]').forEach(n=>n.remove());          // 편집기 UI 제거
+    root.querySelectorAll('span.ed').forEach(s=>                              // span 되돌리기
+      s.replaceWith(document.createTextNode(s.textContent)));
+    root.querySelectorAll('[contenteditable]').forEach(n=>n.removeAttribute('contenteditable'));
+    root.querySelectorAll('#chart svg text[data-bound]').forEach(n=>n.removeAttribute('data-bound'));
+    // 런타임에 계산된 스케일 값은 제거 — 열리는 기기 크기에 맞춰 새로 계산되게
+    const st=root.querySelector('#stage');
+    if(st){st.style.transform='';st.style.position='';st.style.top='';st.style.left='';}
+    const sp=root.querySelector('#stageSpacer'); if(sp) sp.style.height='';
+    const tk=root.querySelector('#ticker'); if(tk) tk.style.transform='';
+    const body=root.querySelector('body');
+    body.style.paddingBottom='';
+    body.classList.remove('editing');
+    body.setAttribute('data-baked','1');                                      // 생성기 재실행 방지
+    const blob=new Blob(['<!DOCTYPE html>\n'+root.outerHTML],{type:'text/html;charset=utf-8'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='mpay-stock-edited.html';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+    toast('수정본 HTML을 다운로드했습니다');
+  }
+  function toast(msg){
+    const d=document.createElement('div');
+    d.setAttribute('data-editor-ui','');
+    d.className='ed-toast'; d.textContent=msg;
+    document.body.appendChild(d);
+    setTimeout(()=>d.remove(),2200);
+  }
+
+  /* ---------- 5. 툴바 (기본 숨김) ---------- */
+  const bar=document.createElement('div');
+  bar.setAttribute('data-editor-ui','');
+  bar.className='ed-bar';
+  bar.innerHTML='<button class="ed-btn" id="edToggle">✎ 편집 모드</button>'+
+                '<button class="ed-btn save" id="edSave">⤓ HTML로 저장</button>'+
+                '<button class="ed-btn close" id="edClose" title="툴바 숨기기">✕</button>';
+  document.body.appendChild(bar);
+  const btnEdit=bar.querySelector('#edToggle');
+  btnEdit.addEventListener('click',()=>setEditing(!document.body.classList.contains('editing')));
+  bar.querySelector('#edSave').addEventListener('click',exportHTML);
+  bar.querySelector('#edClose').addEventListener('click',()=>showBar(false));
+
+  function showBar(on){
+    bar.classList.toggle('open',on);
+    if(!on) setEditing(false);          // 숨기면 완전 읽기 전용으로 복귀
+  }
+
+  /* ---------- 6. 숨겨둔 호출 지점: 우측 하단 모서리 ---------- */
+  /*  터치기기 → 0.9초 길게 누르기 / 마우스 → 더블클릭  */
+  const hot=document.createElement('div');
+  hot.setAttribute('data-editor-ui','');
+  hot.className='ed-hotspot';
+  hot.title='';                          // 툴팁 없음 — 완전히 눈에 띄지 않게
+  document.body.appendChild(hot);
+
+  const toggleBar=()=>showBar(!bar.classList.contains('open'));
+  hot.addEventListener('dblclick',toggleBar);
+
+  let pressTimer=null, startPt=null;
+  const clearPress=()=>{ clearTimeout(pressTimer); pressTimer=null; startPt=null; };
+  hot.addEventListener('touchstart',e=>{
+    const t=e.touches[0]; startPt={x:t.clientX,y:t.clientY};
+    pressTimer=setTimeout(()=>{ pressTimer=null; toggleBar();
+      if(navigator.vibrate) navigator.vibrate(12); },900);
+  },{passive:true});
+  hot.addEventListener('touchmove',e=>{
+    if(!startPt) return;
+    const t=e.touches[0];
+    if(Math.abs(t.clientX-startPt.x)>10||Math.abs(t.clientY-startPt.y)>10) clearPress();
+  },{passive:true});
+  hot.addEventListener('touchend',e=>{ if(pressTimer) clearPress(); else e.preventDefault(); });
+  hot.addEventListener('touchcancel',clearPress);
+  hot.addEventListener('contextmenu',e=>e.preventDefault());
+
+  const count=wrapTextNodes();
+  bindSvgText();
+  setEditing(false);                     // 기본값: 읽기 전용, 툴바 숨김
+  fitToViewport();                       // 차트까지 그려진 뒤 최종 스케일 확정
+  setTimeout(fitToViewport,250);         // 웹폰트/이미지 로드 후 한 번 더 보정
+  window.addEventListener('load',fitToViewport);
+  console.log('편집 가능 텍스트:',count,'개 + 차트 라벨 / 우측 하단 모서리 길게 누르기(또는 더블클릭) → 편집 툴바');
+})();
+</script>
+
+<style>
+.ed{border-radius:3px}
+body.editing .ed{cursor:text}
+body.editing .ed:hover{background:#eef4ff;box-shadow:0 0 0 1px #b8d0f7}
+body.editing .ed:focus{outline:none;background:#fff;box-shadow:0 0 0 1.6px #2679ed}
+body.editing #chart svg text:hover{fill:#2679ed !important;font-weight:700}
+/* 숨겨둔 호출 지점 — 우측 하단 모서리, 완전 투명 */
+.ed-hotspot{position:fixed;right:0;bottom:0;width:56px;height:56px;z-index:9997;
+  background:transparent;cursor:default;touch-action:manipulation;
+  -webkit-touch-callout:none;-webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent}
+/* 차트 라벨은 터치 타깃이 작아 iPad에서 살짝 키운다 */
+@media (pointer:coarse){
+  #chart svg text{paint-order:stroke;stroke:transparent;stroke-width:14px}
+  .ed-btn{height:44px;font-size:14px;padding:0 18px}
+  .ed-btn.close{width:44px}
+}
+/* 툴바는 기본 숨김. .open 일 때만 등장 */
+.ed-bar{position:fixed;right:20px;bottom:48px;z-index:9998;display:flex;gap:8px;
+  opacity:0;visibility:hidden;pointer-events:none;transform:translateY(8px);
+  transition:opacity .16s ease,transform .16s ease}
+.ed-bar.open{opacity:1;visibility:visible;pointer-events:auto;transform:none}
+.ed-btn.close{padding:0;width:38px;font-size:14px;color:#8b9099}
+.ed-btn{height:38px;padding:0 16px;border-radius:19px;border:1px solid #d5d9de;background:#fff;
+  font-size:13px;font-weight:700;color:#3a3f46;cursor:pointer;
+  font-family:-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  box-shadow:0 3px 12px rgba(0,0,0,.12)}
+.ed-btn:hover{background:#f5f7f9}
+.ed-btn.on{background:#2679ed;border-color:#2679ed;color:#fff}
+.ed-btn.save{background:#111;border-color:#111;color:#fff}
+.ed-btn.save:hover{background:#333}
+.ed-toast{position:fixed;right:20px;bottom:96px;z-index:9999;background:#111;color:#fff;
+  font-size:13px;font-weight:600;padding:11px 16px;border-radius:8px;
+  font-family:-apple-system,"Apple SD Gothic Neo",sans-serif;box-shadow:0 4px 16px rgba(0,0,0,.2)}
+</style>
+</body>
+</html>
