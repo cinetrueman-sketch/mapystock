@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>제니스로보틱스 - Mpay 증권</title>
+<style>
+:root{
+  --red:#e8382e; --blue:#2679ed; --green:#00c473;
+  --line:#e8eaed; --line2:#f1f3f5;
+  --txt:#1a1a1a; --gray:#767b83; --gray2:#a3a8af;
+  --bg:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","맑은 고딕",Roboto,sans-serif;
+  color:var(--txt); background:#fff; font-size:13px; -webkit-font-smoothing:antialiased;
+  padding-bottom:34px;
+}
+a{color:inherit;text-decoration:none}
+.up{color:var(--red)} .down{color:var(--blue)}
+
+/* ============ GNB ============ */
+.gnb{height:56px;display:flex;align-items:center;padding:0 22px;gap:18px;border-bottom:1px solid var(--line2)}
+.logo{display:flex;align-items:center;gap:6px;font-weight:800;font-size:19px;letter-spacing:-.5px;position:relative}
+.logo .m{width:23px;height:23px;border-radius:50%;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800}
+.logo .beta{font-size:11px;color:var(--gray2);font-weight:600;font-style:italic;margin-left:1px}
+.logo .adtag{position:absolute;top:34px;left:16px;background:#f1f3f5;color:#8b9099;font-size:10px;padding:2px 6px;border-radius:3px;font-weight:600}
+.search{flex:0 0 380px;height:36px;border:1px solid #e3e6ea;border-radius:18px;display:flex;align-items:center;gap:8px;padding:0 16px;color:var(--gray2);font-size:13.5px;background:#fff}
+.gnb-center{flex:1;display:flex;justify-content:center;gap:26px;font-size:14px;font-weight:600;color:#4a4f57}
+.gnb-center .item{display:flex;align-items:center;gap:6px}
+.gnb-center .item.on{color:#00b25d}
+.ic{width:17px;height:17px;border-radius:4px;background:#eef1f4;display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:#8b9099}
+.gnb-right{display:flex;align-items:center;gap:14px;font-size:13px;color:#4a4f57}
+.btn-outline{height:34px;border:1px solid #e3e6ea;border-radius:17px;padding:0 15px;display:flex;align-items:center;gap:6px;font-weight:600;font-size:13px;color:#4a4f57}
+.divider{width:1px;height:16px;background:var(--line)}
+.avatar{width:22px;height:22px;border-radius:50%;background:#dfe3e8}
+.badge{width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.circ{width:20px;height:20px;border-radius:50%;border:1.6px solid #b6bbc2}
+
+/* ============ 2nd nav ============ */
+.subnav{height:44px;display:flex;align-items:center;padding:0 22px;gap:30px;border-bottom:1px solid var(--line);font-size:15px;color:#5a5f66;font-weight:600}
+.subnav .on{color:#111;font-weight:800;position:relative}
+.subnav .on:after{content:"";position:absolute;left:-2px;right:-2px;bottom:-13px;height:2.5px;background:#111}
+.subnav-right{margin-left:auto;display:flex;align-items:center;gap:12px;font-size:12.5px;color:var(--gray)}
+.subnav-right .notice{color:#a3a8af;font-weight:600}
+.subnav-right .txt{color:#3a3f46;font-weight:500;max-width:230px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ============ layout ============ */
+.wrap{display:flex;align-items:flex-start}
+.left{width:298px;flex:0 0 298px;border-right:1px solid var(--line);padding:14px 20px 40px}
+.center{flex:1;min-width:0;padding:10px 20px 40px}
+.right{width:330px;flex:0 0 330px;padding:16px 20px 40px}
+
+/* ============ left ============ */
+.crumb{color:var(--gray2);font-size:12.5px;margin-bottom:14px}
+.krx{display:flex;align-items:center;gap:0;margin-bottom:14px}
+.krx .tab{height:26px;padding:0 12px;border:1px solid #d8dce1;font-size:12px;font-weight:700;display:flex;align-items:center;color:#8b9099;background:#fff}
+.krx .tab:first-child{border-radius:4px 0 0 4px;color:#111;border-color:#111;position:relative;z-index:1}
+.krx .tab:last-child{border-radius:0 4px 4px 0;margin-left:-1px}
+.krx .icons{margin-left:auto;display:flex;gap:10px;color:#b6bbc2;font-size:17px}
+.stk-head{display:flex;gap:11px;align-items:flex-start}
+.stk-logo{width:44px;height:44px;border-radius:50%;background:#16266b;color:#fff;font-size:7.5px;font-weight:700;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.15;flex:0 0 44px;letter-spacing:-.3px}
+.stk-meta{font-size:12px;color:var(--gray);margin-bottom:2px}
+.stk-name{font-size:20px;font-weight:800;letter-spacing:-.6px}
+.stk-price{font-size:27px;font-weight:800;margin-top:9px;letter-spacing:-.8px}
+.stk-chg{font-size:14.5px;font-weight:700;margin-top:2px}
+.stk-time{font-size:11.5px;color:var(--gray2);margin-top:6px}
+.banner{margin-top:16px;background:#f2fbf6;border-radius:8px;height:46px;display:flex;align-items:center;gap:8px;padding:0 14px;font-size:13.5px;font-weight:600}
+.banner .arrow{margin-left:auto;color:#b6bbc2}
+.sec-title{margin-top:26px;font-size:15px;font-weight:800;display:flex;align-items:center;gap:4px}
+.sec-title span{color:#c4c9cf;font-weight:400}
+
+.slider{margin:20px 0 6px;position:relative;height:34px}
+.slider .bar{position:absolute;top:24px;left:0;right:0;height:4px;border-radius:2px;background:linear-gradient(90deg,#2679ed 0%,#dfe3e8 32%,#dfe3e8 100%)}
+.slider .dot{position:absolute;top:21px;left:31%;width:10px;height:10px;border-radius:50%;background:#111;border:2px solid #fff;box-shadow:0 0 0 1px #111}
+.slider .bub{position:absolute;top:0;left:31%;transform:translateX(-50%);background:#111;color:#fff;font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:4px}
+.slider .bub:after{content:"";position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);border-left:4px solid transparent;border-right:4px solid transparent;border-top:4px solid #111}
+.slider-lbl{display:flex;justify-content:space-between;font-size:11.5px;color:var(--gray);margin-top:12px}
+.slider-lbl b{display:block;color:#111;font-size:13px;font-weight:700;margin-top:2px}
+.slider-lbl .r{text-align:right}
+
+.tbl{width:100%;border-collapse:collapse;margin-top:14px}
+.tbl td{padding:7px 0;font-size:13px}
+.tbl td.k{color:var(--gray);width:52px}
+.tbl td.v{text-align:right;font-weight:600;padding-right:16px}
+.tbl td.v:last-child{padding-right:0}
+.note{font-size:11px;color:#b6bbc2;margin-top:12px;line-height:1.5}
+.industry{margin-top:16px;background:#f7f8f9;border-radius:8px;padding:12px 14px}
+.industry div{display:flex;justify-content:space-between;font-size:12.5px;padding:3px 0;color:var(--gray)}
+.industry div b{color:#111;font-weight:700}
+
+/* ============ center ============ */
+.tabs{display:flex;gap:24px;border-bottom:1px solid var(--line);padding:0 4px;font-size:14.5px;font-weight:600;color:#5a5f66}
+.tabs div{padding:10px 0 12px;position:relative}
+.tabs .on{color:#111;font-weight:800}
+.tabs .on:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2.5px;background:#111}
+
+.ad-banner{margin-top:16px;background:#fdf6ec;border-radius:8px;height:78px;display:flex;align-items:center;padding:0 20px;gap:18px;position:relative}
+.ad-banner .thumb{width:104px;height:56px;border-radius:6px;background:linear-gradient(135deg,#4a3a2c,#8a6a4a);display:flex;align-items:center;justify-content:center;color:#ffe9c9;font-size:10px;font-weight:700;text-align:center;line-height:1.3;letter-spacing:-.2px}
+.ad-banner .t1{font-size:16px;font-weight:800;letter-spacing:-.4px}
+.ad-banner .t2{font-size:12.5px;color:#7a6a58;margin-top:5px}
+.ad-banner .cta{margin-left:auto;background:#8a5a2b;color:#fff;font-size:13px;font-weight:700;padding:10px 18px;border-radius:20px}
+.ad-banner .adm{position:absolute;top:8px;right:10px;font-size:10px;color:#c0b3a3;font-weight:600}
+
+.chart-head{display:flex;align-items:center;gap:10px;margin-top:22px}
+.chart-head h2{font-size:20px;font-weight:800;margin-right:auto}
+.pill{height:30px;border:1px solid #e3e6ea;border-radius:6px;display:flex;align-items:center;padding:0 10px;font-size:12.5px;font-weight:600;color:#4a4f57;gap:5px}
+.seg{height:30px;display:flex;border-radius:6px;overflow:hidden}
+.seg div{width:34px;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:600;color:#5a5f66;border:1px solid #e3e6ea;margin-left:-1px}
+.seg div:first-child{margin-left:0;border-radius:6px 0 0 6px}
+.seg div:last-child{border-radius:0 6px 6px 0}
+.seg div.on{background:#eef1f4;color:#111;font-weight:800;border-color:#d5d9de;position:relative;z-index:1}
+.searchmini{width:150px;height:30px;border:1px solid #e3e6ea;border-radius:6px;display:flex;align-items:center;gap:6px;padding:0 10px;color:#b6bbc2;font-size:12.5px}
+.tools{display:flex;gap:14px;font-size:12.5px;color:#4a4f57;font-weight:600;align-items:center}
+
+.chartbox{margin-top:14px;border:1px solid var(--line);border-radius:10px;padding:16px 16px 8px;position:relative}
+.ohlc{font-size:12.5px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.ohlc b{font-weight:700}
+.linear{position:absolute;top:12px;right:16px;width:96px;height:30px;border:1px solid #e3e6ea;border-radius:6px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;font-size:12.5px;color:#4a4f57;background:#fff}
+.malegend{margin-top:14px;font-size:12px;color:#4a4f57}
+.malegend .nums{margin-top:4px;font-size:11.5px;line-height:1.65;color:#5a5f66;font-family:ui-monospace,Menlo,monospace}
+
+.lower{display:flex;gap:18px;margin-top:22px;align-items:flex-start}
+.panel{flex:1;min-width:0}
+.panel h3{font-size:17px;font-weight:800;display:flex;align-items:center;gap:7px}
+.panel h3 small{font-size:11.5px;color:#b6bbc2;font-weight:600}
+.panel h3 .prov{margin-left:auto;font-size:11.5px;color:#b6bbc2;font-weight:600}
+.panel h3 .chip{background:#111;color:#fff;font-size:11.5px;padding:3px 9px;border-radius:11px;font-weight:700}
+.panel h3 .chip.off{background:#f1f3f5;color:#8b9099}
+.dtbl{width:100%;border-collapse:collapse;margin-top:12px;font-size:12.5px}
+.dtbl th{color:var(--gray);font-weight:500;padding:9px 6px;border-bottom:1px solid var(--line);font-size:12px}
+.dtbl td{padding:9px 6px;border-bottom:1px solid var(--line2);text-align:right}
+.dtbl th:first-child,.dtbl td:first-child{text-align:left}
+.dtbl .mid{text-align:center;font-weight:700}
+.hoga-row td{position:relative}
+.hoga-bar{position:absolute;right:0;top:4px;bottom:4px;background:#eaf1fd;z-index:0;border-radius:2px}
+.hoga-row td span{position:relative;z-index:1}
+
+/* ============ right ============ */
+.rlist .row{display:flex;align-items:center;gap:10px;padding:11px 0}
+.rlist .ico{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:7px;color:#fff;font-weight:800;flex:0 0 24px;letter-spacing:-.2px}
+.rlist .nm{font-size:14px;font-weight:600}
+.rlist .pr{margin-left:auto;text-align:right}
+.rlist .pr .p{font-size:16px;font-weight:800;letter-spacing:-.3px}
+.rlist .pr .c{font-size:12px;font-weight:600;margin-top:2px}
+.more{width:100%;height:44px;border:1px solid #e3e6ea;border-radius:8px;background:#fff;font-size:14px;font-weight:700;color:#3a3f46;margin-top:12px}
+.adcard{margin-top:20px;border-radius:10px;overflow:hidden;position:relative;background:#0d0d10}
+.adcard .img{height:196px;background:radial-gradient(ellipse at 50% 62%,#5a5f6a 0%,#26272c 45%,#0d0d10 78%);display:flex;align-items:center;justify-content:center}
+.adcard .ring{width:120px;height:120px;border-radius:50%;border:22px solid rgba(225,228,233,.82);filter:blur(.4px);box-shadow:0 0 46px rgba(200,210,225,.35)}
+.adcard .adm{position:absolute;top:9px;right:10px;font-size:10px;color:#8a8f98;font-weight:600}
+.adcard .body{background:#fff;padding:14px 16px 16px;border:1px solid var(--line);border-top:none;border-radius:0 0 10px 10px}
+.adcard .brand{width:30px;height:30px;border-radius:50%;background:#111;color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:-30px 0 10px}
+.adcard .t1{font-size:15px;font-weight:800;letter-spacing:-.4px}
+.adcard .t2{font-size:12.5px;color:#6a6f77;margin-top:5px}
+.adcard .foot{display:flex;align-items:center;margin-top:12px}
+.adcard .foot .n{font-size:12.5px;color:#8b9099;font-weight:600}
+.adcard .foot .b{margin-left:auto;background:#8b9099;color:#fff;font-size:12px;font-weight:600;padding:7px 13px;border-radius:16px}
+
+/* ============ ticker ============ */
+.ticker{position:fixed;left:0;right:0;bottom:0;height:34px;background:#fafbfc;border-top:1px solid var(--line);display:flex;align-items:center;font-size:12px;overflow:hidden}
+.ticker-track{display:flex;align-items:center;flex:0 0 auto;will-change:transform;animation:ticker-scroll 42s linear infinite}
+.ticker:hover .ticker-track{animation-play-state:paused}
+@keyframes ticker-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.ticker-track{animation:none}}
+.ticker .it{display:flex;align-items:center;gap:6px;white-space:nowrap;padding:0 22px}
+.ticker .it .n{color:#5a5f66}
+.ticker .it .v{font-weight:700}
+</style>
+</head>
+<body class="" data-baked="1">
+
+<!-- ============ GNB ============ -->
+<div class="gnb">
+  <div class="logo"><span class="m">M</span>pay 증권<span class="beta">Beta</span><span class="adtag">AD</span></div>
+  <div class="search">🔍 종목명·지수명 입력 (단축키⌘+K)</div>
+  <div class="gnb-center">
+    <div class="item"><span class="ic">₩</span>금융</div>
+    <div class="item"><span class="ic">P</span>포인트</div>
+    <div class="item"><span class="ic">▤</span>결제</div>
+    <div class="item on"><span class="ic" style="background:#e4f7ec;color:#00b25d">▲</span>증권</div>
+    <div class="item"><span class="ic">▣</span>부동산</div>
+  </div>
+  <div class="gnb-right">
+    <div class="btn-outline">↻ 기존 증권 보기</div>
+    <div class="divider"></div>
+    <div style="display:flex;align-items:center;gap:6px"><span class="avatar"></span>정준하 ▾</div>
+    <span class="circ"></span><span class="circ"></span>
+    <span class="badge">59</span>
+  </div>
+</div>
+
+<!-- ============ SUB NAV ============ -->
+<div class="subnav">
+  <div>홈</div><div class="on">국내</div><div>미국 · 글로벌</div><div>가상자산</div>
+  <div>시장지표</div><div>토론</div><div>뉴스</div><div>리서치</div><div>MY</div>
+  <div class="subnav-right"><span class="notice">공지</span><span class="divider"></span><span class="txt">새롭게 변화될 Mpay 증권 PC서…</span></div>
+</div>
+
+<div class="wrap">
+  <!-- ============ LEFT ============ -->
+  <div class="left">
+    <div class="crumb">‹ 국내 종목 / 주식</div>
+    <div class="krx">
+      <div class="tab">KRX</div><div class="tab">NXT</div>
+      <div class="icons"><span>🔔</span><span>☆</span></div>
+    </div>
+    <div class="stk-head">
+      <div class="stk-logo">제니스<br>로보틱스</div>
+      <div>
+        <div class="stk-meta">512340 코스닥 · 기계</div>
+        <div class="stk-name">제니스로보틱스</div>
+      </div>
+    </div>
+    <div class="stk-price">11,840<span style="font-size:19px">원</span></div>
+    <div class="stk-chg down">▼ 2,030 (-14.64%)</div>
+    <div class="stk-time">07. 30. · 장마감</div>
+
+    <div class="banner">📉 15% 이상 하락했어요 <span class="arrow">›</span></div>
+
+    <div class="sec-title">시세정보 <span>›</span></div>
+    <div class="slider">
+      <div class="bub">11,840</div>
+      <div class="bar"></div>
+      <div class="dot"></div>
+    </div>
+    <div class="slider-lbl">
+      <div>52주 최저<b>7,540</b></div>
+      <div class="r">52주 최고<b>26,500</b></div>
+    </div>
+    <table class="tbl">
+      <tbody><tr><td class="k">전일</td><td class="v">13,870</td><td class="k">시가</td><td class="v down">13,530</td></tr>
+      <tr><td class="k">고가</td><td class="v down">13,760</td><td class="k">저가</td><td class="v down">11,520</td></tr>
+      <tr><td class="k">거래량</td><td class="v">703,682</td><td class="k">대금</td><td class="v">8,805백만</td></tr>
+    </tbody></table>
+    <div class="note">일별 시세 데이터는 한국거래소(KRX)에서 제공합니다.</div>
+
+    <div class="sec-title">투자정보 <span>›</span></div>
+    <table class="tbl">
+      <tbody><tr><td class="k">시총</td><td class="v">1,829억</td><td class="k" style="width:66px">외인소진율</td><td class="v">1.13%</td></tr>
+      <tr><td class="k">PER</td><td class="v">-11.86배</td><td class="k">EPS</td><td class="v">-998원</td></tr>
+      <tr><td class="k">추정PER</td><td class="v">N/A</td><td class="k">추정EPS</td><td class="v">N/A</td></tr>
+      <tr><td class="k">PBR</td><td class="v">3.39배</td><td class="k">BPS</td><td class="v">3,495원</td></tr>
+      <tr><td class="k">배당수익률</td><td class="v">N/A</td><td class="k">주당배당금</td><td class="v">N/A</td></tr>
+    </tbody></table>
+    <div class="note">PER, EPS, PBR, BPS 배당수익률 기준 ⓘ</div>
+    <div class="industry">
+      <div>동일업종 등락률 <b class="down">-2.76%</b></div>
+      <div>동일업종 PER <b>91.83배</b></div>
+    </div>
+  </div>
+
+  <!-- ============ CENTER ============ -->
+  <div class="center">
+    <div class="tabs">
+      <div class="on">차트·시세</div><div>🔥 토론</div><div>종목분석</div><div>리포트</div>
+      <div>뉴스·공시</div><div>공매도현황</div><div>인사이트</div>
+    </div>
+
+    <div class="ad-banner">
+      <span class="adm">AD</span>
+      <div class="thumb">LUMIÈRE<br>BRAND WEEK</div>
+      <div>
+        <div class="t1">뤼미에르 오디오 브랜드위크</div>
+        <div class="t2">에어웨이브5 출시 + 넥밴드 + 파우치 증정 최대혜택</div>
+      </div>
+      <div class="cta">지금 구매하기 ›</div>
+    </div>
+
+    <div class="chart-head">
+      <h2>차트</h2>
+      <div class="pill">30분 ▾</div>
+      <div class="seg"><div>일</div><div class="on">주</div><div>월</div><div>년</div></div>
+      <div class="searchmini">🔍 종목 비교</div>
+      <div class="tools"><span>📈 보조지표</span><span>✏️ 그리기</span><span>🗒 공시</span><span style="color:#b6bbc2">▮▮ ▾</span><span style="color:#b6bbc2">⤢</span></div>
+    </div>
+
+    <div class="chartbox">
+      <div class="ohlc">
+        <span>시 <b class="up">12,690</b></span>
+        <span>고 <b class="up">14,900</b></span>
+        <span>저 <b class="down">10,950</b></span>
+        <span>종 <b>11,840</b></span>
+        <span>0.00%</span>
+        <span>거 <b>5,317,950</b></span>
+      </div>
+      <div class="linear"><span>Linear</span><span style="color:#b6bbc2">▾</span></div>
+      <div class="malegend">
+        이동평균 <b style="color:#5a5f66">5 20 60 120</b> <span style="color:#c4c9cf">✕</span>
+        <div class="nums">
+          MA1 &nbsp;<span style="color:#00b25d">11,846.00</span><br>
+          MA2 &nbsp;<span style="color:#e8382e">12,416.50</span><br>
+          MA3 &nbsp;<span style="color:#e8a13a">13,491.00</span>
+        </div>
+      </div>
+      <div id="chart"><svg viewBox="0 0 1085 448" width="100%" xmlns="http://www.w3.org/2000/svg" style="display:block;margin-top:-58px"><line x1="8" y1="18" x2="973" y2="18" stroke="#f4f5f7"></line><text x="983" y="22" font-size="11" fill="#a3a8af" style="cursor: text;">30,000</text><line x1="8" y1="68.54545454545455" x2="973" y2="68.54545454545455" stroke="#f4f5f7"></line><text x="983" y="72.54545454545455" font-size="11" fill="#a3a8af" style="cursor: text;">25,000</text><line x1="8" y1="119.0909090909091" x2="973" y2="119.0909090909091" stroke="#f4f5f7"></line><text x="983" y="123.0909090909091" font-size="11" fill="#a3a8af" style="cursor: text;">20,000</text><line x1="8" y1="169.63636363636363" x2="973" y2="169.63636363636363" stroke="#f4f5f7"></line><text x="983" y="173.63636363636363" font-size="11" fill="#a3a8af" style="cursor: text;">15,000</text><line x1="8" y1="220.1818181818182" x2="973" y2="220.1818181818182" stroke="#f4f5f7"></line><text x="983" y="224.1818181818182" font-size="11" fill="#a3a8af" style="cursor: text;">10,000</text><line x1="8" y1="270.72727272727275" x2="973" y2="270.72727272727275" stroke="#f4f5f7"></line><text x="983" y="274.72727272727275" font-size="11" fill="#a3a8af" style="cursor: text;">5,000</text><path d="M91.50961538461539 71.6L110.06730769230768 71.4L128.625 75.0L147.1826923076923 81.3L165.7403846153846 85.3L184.29807692307693 89.2L202.85576923076923 95.0L221.41346153846152 98.5L239.97115384615384 101.9L258.52884615384613 107.4L277.0865384615384 110.6L295.6442307692307 114.0L314.20192307692304 119.3L332.75961538461536 122.3L351.3173076923077 125.6L369.87499999999994 130.6L388.43269230769226 133.4L406.9903846153846 136.7L425.54807692307685 141.7L444.10576923076917 144.6L462.6634615384615 147.6L481.2211538461538 152.5L499.77884615384613 155.1L518.3365384615385 157.9L536.8942307692307 162.4L555.4519230769231 164.8L574.0096153846154 167.2L592.5673076923077 171.3L611.125 173.3L629.6826923076923 175.5L648.2403846153846 179.3L666.7980769230769 181.4L685.3557692307693 183.4L703.9134615384615 186.8L722.4711538461538 188.4L741.0288461538462 190.1L759.5865384615385 193.1L778.1442307692307 194.5L796.7019230769231 195.9L815.2596153846154 198.8L833.8173076923076 200.0L852.375 201.2L870.9326923076923 203.6L889.4903846153846 204.8L908.0480769230769 206.0L926.6057692307692 205.2L945.1634615384615 202.8L963.7211538461538 201.5" fill="none" stroke="#3fb96b" stroke-width="1.3"></path><path d="M369.87499999999994 100.5L388.43269230769226 103.5L406.9903846153846 107.4L425.54807692307685 111.8L444.10576923076917 115.7L462.6634615384615 119.5L481.2211538461538 123.7L499.77884615384613 127.4L518.3365384615385 131.0L536.8942307692307 135.0L555.4519230769231 138.4L574.0096153846154 141.8L592.5673076923077 145.6L611.125 148.8L629.6826923076923 152.0L648.2403846153846 155.6L666.7980769230769 158.6L685.3557692307693 161.6L703.9134615384615 164.9L722.4711538461538 167.7L741.0288461538462 170.4L759.5865384615385 173.5L778.1442307692307 176.1L796.7019230769231 178.5L815.2596153846154 181.3L833.8173076923076 183.5L852.375 185.7L870.9326923076923 188.2L889.4903846153846 190.2L908.0480769230769 192.2L926.6057692307692 193.6L945.1634615384615 194.6L963.7211538461538 195.8" fill="none" stroke="#e8382e" stroke-width="1.3"></path><path d="M555.4519230769231 119.1L574.0096153846154 122.3L592.5673076923077 126.0L611.125 129.7L629.6826923076923 133.4L648.2403846153846 137.0L666.7980769230769 140.6L685.3557692307693 144.0L703.9134615384615 147.3L722.4711538461538 150.6L741.0288461538462 153.8L759.5865384615385 156.9L778.1442307692307 160.0L796.7019230769231 163.0L815.2596153846154 165.9L833.8173076923076 168.7L852.375 171.5L870.9326923076923 174.1L889.4903846153846 176.7L908.0480769230769 179.3L926.6057692307692 181.2L945.1634615384615 183.0L963.7211538461538 184.9" fill="none" stroke="#e8a13a" stroke-width="1.3"></path><line x1="17.278846153846153" y1="74.54889021586979" x2="17.278846153846153" y2="79.45333067521918" stroke="#e8382e" stroke-width="1"></line><rect x="11.525961538461537" y="77.64363636363636" width="11.50576923076923" height="1.5" fill="#e8382e"></rect><line x1="35.83653846153846" y1="63.224077358997405" x2="35.83653846153846" y2="91.17547016630847" stroke="#e8382e" stroke-width="1"></line><rect x="30.083653846153844" y="67.53454545454545" width="11.50576923076923" height="10.10909090909091" fill="#e8382e"></rect><line x1="54.39423076923077" y1="53.381818181818176" x2="54.39423076923077" y2="74.18740748125944" stroke="#e8382e" stroke-width="1"></line><rect x="48.64134615384615" y="62.480000000000004" width="11.50576923076923" height="5.054545454545448" fill="#e8382e"></rect><line x1="72.95192307692307" y1="53.101288018269024" x2="72.95192307692307" y2="81.90480822746164" stroke="#2679ed" stroke-width="1"></line><rect x="67.19903846153845" y="62.480000000000004" width="11.50576923076923" height="8.087272727272719" fill="#2679ed"></rect><line x1="91.50961538461539" y1="63.80215449643871" x2="91.50961538461539" y2="90.37624127291294" stroke="#2679ed" stroke-width="1"></line><rect x="85.75673076923077" y="70.56727272727272" width="11.50576923076923" height="9.098181818181828" fill="#2679ed"></rect><line x1="110.06730769230768" y1="74.30538050135888" x2="110.06730769230768" y2="83.85793629482151" stroke="#e8382e" stroke-width="1"></line><rect x="104.31442307692306" y="76.63272727272727" width="11.50576923076923" height="3.0327272727272856" fill="#e8382e"></rect><line x1="128.625" y1="63.57871646987001" x2="128.625" y2="89.14399136275364" stroke="#2679ed" stroke-width="1"></line><rect x="122.87211538461538" y="76.63272727272727" width="11.50576923076923" height="9.098181818181828" fill="#2679ed"></rect><line x1="147.1826923076923" y1="75.80005634003396" x2="147.1826923076923" y2="105.85340554837818" stroke="#2679ed" stroke-width="1"></line><rect x="141.4298076923077" y="85.7309090909091" width="11.50576923076923" height="8.087272727272719" fill="#2679ed"></rect><line x1="165.7403846153846" y1="89.1301551831356" x2="165.7403846153846" y2="100.00454399001094" stroke="#e8382e" stroke-width="1"></line><rect x="159.9875" y="90.78545454545456" width="11.50576923076923" height="3.032727272727257" fill="#e8382e"></rect><line x1="184.29807692307693" y1="83.76754282805459" x2="184.29807692307693" y2="104.65371587631732" stroke="#2679ed" stroke-width="1"></line><rect x="178.54519230769233" y="90.78545454545456" width="11.50576923076923" height="8.087272727272719" fill="#2679ed"></rect><line x1="202.85576923076923" y1="90.48238928722327" x2="202.85576923076923" y2="117.20860128593543" stroke="#2679ed" stroke-width="1"></line><rect x="197.10288461538462" y="98.87272727272727" width="11.50576923076923" height="7.076363636363624" fill="#2679ed"></rect><line x1="221.41346153846152" y1="94.91166304605937" x2="221.41346153846152" y2="110.39699878886665" stroke="#e8382e" stroke-width="1"></line><rect x="215.66057692307692" y="102.91636363636364" width="11.50576923076923" height="3.032727272727257" fill="#e8382e"></rect><line x1="239.97115384615384" y1="100.54528959883858" x2="239.97115384615384" y2="113.62410103516741" stroke="#2679ed" stroke-width="1"></line><rect x="234.21826923076924" y="102.91636363636364" width="11.50576923076923" height="8.087272727272719" fill="#2679ed"></rect><line x1="258.52884615384613" y1="107.44229669641288" x2="258.52884615384613" y2="121.83594434475195" stroke="#2679ed" stroke-width="1"></line><rect x="252.77596153846153" y="111.00363636363636" width="11.50576923076923" height="7.076363636363638" fill="#2679ed"></rect><line x1="277.0865384615384" y1="106.36436116712525" x2="277.0865384615384" y2="124.20691054914715" stroke="#e8382e" stroke-width="1"></line><rect x="271.33365384615377" y="115.04727272727274" width="11.50576923076923" height="3.032727272727257" fill="#e8382e"></rect><line x1="295.6442307692307" y1="108.69430263000531" x2="295.6442307692307" y2="125.62533171083497" stroke="#2679ed" stroke-width="1"></line><rect x="289.8913461538461" y="115.04727272727274" width="11.50576923076923" height="8.087272727272705" fill="#2679ed"></rect><line x1="314.20192307692304" y1="114.17957201270768" x2="314.20192307692304" y2="130.11659364583193" stroke="#2679ed" stroke-width="1"></line><rect x="308.4490384615384" y="123.13454545454545" width="11.50576923076923" height="6.065454545454543" fill="#2679ed"></rect><line x1="332.75961538461536" y1="123.93985329742742" x2="332.75961538461536" y2="135.97724165691835" stroke="#e8382e" stroke-width="1"></line><rect x="327.0067307692307" y="126.16727272727273" width="11.50576923076923" height="3.032727272727257" fill="#e8382e"></rect><line x1="351.3173076923077" y1="124.40512674075869" x2="351.3173076923077" y2="137.7352659131358" stroke="#2679ed" stroke-width="1"></line><rect x="345.56442307692305" y="126.16727272727273" width="11.50576923076923" height="8.087272727272719" fill="#2679ed"></rect><line x1="369.87499999999994" y1="131.17914203140896" x2="369.87499999999994" y2="141.63104631832465" stroke="#2679ed" stroke-width="1"></line><rect x="364.1221153846153" y="134.25454545454545" width="11.50576923076923" height="6.065454545454543" fill="#2679ed"></rect><line x1="388.43269230769226" y1="133.59676068911944" x2="388.43269230769226" y2="143.21229880663313" stroke="#e8382e" stroke-width="1"></line><rect x="382.67980769230763" y="137.28727272727272" width="11.50576923076923" height="3.0327272727272714" fill="#e8382e"></rect><line x1="406.9903846153846" y1="132.29136436548282" x2="406.9903846153846" y2="154.12731253044444" stroke="#2679ed" stroke-width="1"></line><rect x="401.23749999999995" y="137.28727272727272" width="11.50576923076923" height="8.087272727272733" fill="#2679ed"></rect><line x1="425.54807692307685" y1="141.3755534857491" x2="425.54807692307685" y2="159.40669680927448" stroke="#2679ed" stroke-width="1"></line><rect x="419.7951923076922" y="145.37454545454545" width="11.50576923076923" height="6.065454545454543" fill="#2679ed"></rect><line x1="444.10576923076917" y1="141.647012776679" x2="444.10576923076917" y2="155.14728515269624" stroke="#e8382e" stroke-width="1"></line><rect x="438.35288461538454" y="148.40727272727273" width="11.50576923076923" height="3.0327272727272714" fill="#e8382e"></rect><line x1="462.6634615384615" y1="148.06473356962152" x2="462.6634615384615" y2="162.87910551873875" stroke="#2679ed" stroke-width="1"></line><rect x="456.91057692307686" y="148.40727272727273" width="11.50576923076923" height="7.076363636363652" fill="#2679ed"></rect><line x1="481.2211538461538" y1="148.3991773534768" x2="481.2211538461538" y2="164.25165128525808" stroke="#2679ed" stroke-width="1"></line><rect x="475.4682692307692" y="155.48363636363638" width="11.50576923076923" height="6.065454545454543" fill="#2679ed"></rect><line x1="499.77884615384613" y1="155.486489612424" x2="499.77884615384613" y2="162.9565778914575" stroke="#e8382e" stroke-width="1"></line><rect x="494.0259615384615" y="158.51636363636365" width="11.50576923076923" height="3.0327272727272714" fill="#e8382e"></rect><line x1="518.3365384615385" y1="158.33189847356041" x2="518.3365384615385" y2="173.23610604433262" stroke="#2679ed" stroke-width="1"></line><rect x="512.5836538461539" y="158.51636363636365" width="11.50576923076923" height="7.076363636363624" fill="#2679ed"></rect><line x1="536.8942307692307" y1="161.30852834509207" x2="536.8942307692307" y2="171.58445190936197" stroke="#2679ed" stroke-width="1"></line><rect x="531.1413461538461" y="165.59272727272727" width="11.50576923076923" height="5.054545454545462" fill="#2679ed"></rect><line x1="555.4519230769231" y1="164.10108950098083" x2="555.4519230769231" y2="176.26179614176982" stroke="#e8382e" stroke-width="1"></line><rect x="549.6990384615385" y="167.61454545454546" width="11.50576923076923" height="3.0327272727272714" fill="#e8382e"></rect><line x1="574.0096153846154" y1="165.04801990265264" x2="574.0096153846154" y2="179.55779963270493" stroke="#2679ed" stroke-width="1"></line><rect x="568.2567307692308" y="167.61454545454546" width="11.50576923076923" height="6.065454545454543" fill="#2679ed"></rect><line x1="592.5673076923077" y1="166.96715753749706" x2="592.5673076923077" y2="182.6228529842253" stroke="#2679ed" stroke-width="1"></line><rect x="586.8144230769232" y="173.68" width="11.50576923076923" height="5.054545454545433" fill="#2679ed"></rect><line x1="611.125" y1="170.08343922593963" x2="611.125" y2="180.14863894899437" stroke="#e8382e" stroke-width="1"></line><rect x="605.3721153846154" y="175.70181818181817" width="11.50576923076923" height="3.0327272727272714" fill="#e8382e"></rect><line x1="629.6826923076923" y1="170.52629556413834" x2="629.6826923076923" y2="187.99387231955123" stroke="#2679ed" stroke-width="1"></line><rect x="623.9298076923077" y="175.70181818181817" width="11.50576923076923" height="6.065454545454571" fill="#2679ed"></rect><line x1="648.2403846153846" y1="178.1453347198958" x2="648.2403846153846" y2="193.30513693599914" stroke="#2679ed" stroke-width="1"></line><rect x="642.4875000000001" y="181.76727272727274" width="11.50576923076923" height="5.054545454545462" fill="#2679ed"></rect><line x1="666.7980769230769" y1="182.04386076259337" x2="666.7980769230769" y2="190.24504753761858" stroke="#e8382e" stroke-width="1"></line><rect x="661.0451923076923" y="183.7890909090909" width="11.50576923076923" height="3.0327272727273" fill="#e8382e"></rect><line x1="685.3557692307693" y1="182.27881827132973" x2="685.3557692307693" y2="193.20234499931018" stroke="#2679ed" stroke-width="1"></line><rect x="679.6028846153847" y="183.7890909090909" width="11.50576923076923" height="5.054545454545462" fill="#2679ed"></rect><line x1="703.9134615384615" y1="183.64851942988616" x2="703.9134615384615" y2="197.30989863600087" stroke="#2679ed" stroke-width="1"></line><rect x="698.160576923077" y="188.84363636363636" width="11.50576923076923" height="4.043636363636381" fill="#2679ed"></rect><line x1="722.4711538461538" y1="189.56116557737067" x2="722.4711538461538" y2="195.88727892708238" stroke="#e8382e" stroke-width="1"></line><rect x="716.7182692307692" y="189.85454545454544" width="11.50576923076923" height="3.0327272727273" fill="#e8382e"></rect><line x1="741.0288461538462" y1="187.93271296524063" x2="741.0288461538462" y2="201.97550245123725" stroke="#2679ed" stroke-width="1"></line><rect x="735.2759615384616" y="189.85454545454544" width="11.50576923076923" height="5.054545454545462" fill="#2679ed"></rect><line x1="759.5865384615385" y1="188.78988032032828" x2="759.5865384615385" y2="204.046856766005" stroke="#2679ed" stroke-width="1"></line><rect x="753.8336538461539" y="194.9090909090909" width="11.50576923076923" height="4.043636363636352" fill="#2679ed"></rect><line x1="778.1442307692307" y1="194.5262159487238" x2="778.1442307692307" y2="204.27615091844245" stroke="#e8382e" stroke-width="1"></line><rect x="772.3913461538461" y="195.92000000000002" width="11.50576923076923" height="3.032727272727243" fill="#e8382e"></rect><line x1="796.7019230769231" y1="190.03537704005024" x2="796.7019230769231" y2="205.83027268084612" stroke="#2679ed" stroke-width="1"></line><rect x="790.9490384615385" y="195.92000000000002" width="11.50576923076923" height="4.043636363636352" fill="#2679ed"></rect><line x1="815.2596153846154" y1="196.18134386487245" x2="815.2596153846154" y2="206.7269027321479" stroke="#2679ed" stroke-width="1"></line><rect x="809.5067307692308" y="199.96363636363637" width="11.50576923076923" height="4.043636363636352" fill="#2679ed"></rect><line x1="833.8173076923076" y1="198.0116545389042" x2="833.8173076923076" y2="209.0325228494533" stroke="#e8382e" stroke-width="1"></line><rect x="828.064423076923" y="200.97454545454545" width="11.50576923076923" height="3.0327272727272714" fill="#e8382e"></rect><line x1="852.375" y1="195.78994998858073" x2="852.375" y2="207.41044831278484" stroke="#2679ed" stroke-width="1"></line><rect x="846.6221153846154" y="200.97454545454545" width="11.50576923076923" height="4.043636363636381" fill="#2679ed"></rect><line x1="870.9326923076923" y1="202.4394543455806" x2="870.9326923076923" y2="212.08342902246648" stroke="#2679ed" stroke-width="1"></line><rect x="865.1798076923077" y="205.01818181818183" width="11.50576923076923" height="3.032727272727243" fill="#2679ed"></rect><line x1="889.4903846153846" y1="202.29599886750137" x2="889.4903846153846" y2="208.08762104947107" stroke="#e8382e" stroke-width="1"></line><rect x="883.7375000000001" y="206.0290909090909" width="11.50576923076923" height="2.021818181818162" fill="#e8382e"></rect><line x1="908.0480769230769" y1="201.41259206304895" x2="908.0480769230769" y2="245.0501818181818" stroke="#2679ed" stroke-width="1"></line><rect x="902.2951923076923" y="206.0290909090909" width="11.50576923076923" height="4.043636363636352" fill="#2679ed"></rect><line x1="926.6057692307692" y1="187.29088737113352" x2="926.6057692307692" y2="215.42764066937997" stroke="#e8382e" stroke-width="1"></line><rect x="920.8528846153846" y="196.9309090909091" width="11.50576923076923" height="13.141818181818167" fill="#e8382e"></rect><line x1="945.1634615384615" y1="187.18581759910938" x2="945.1634615384615" y2="201.48791353193354" stroke="#e8382e" stroke-width="1"></line><rect x="939.410576923077" y="192.98836363636366" width="11.50576923076923" height="3.9425454545454386" fill="#e8382e"></rect><line x1="963.7211538461538" y1="170.64727272727274" x2="963.7211538461538" y2="210.57818181818183" stroke="#2679ed" stroke-width="1"></line><rect x="957.9682692307692" y="192.98836363636366" width="11.50576923076923" height="8.592727272727245" fill="#2679ed"></rect><text x="66.39423076923077" y="38.381818181818176" font-size="11" fill="#767b83" style="cursor: text;">최고</text><text x="95.39423076923077" y="38.381818181818176" font-size="11" fill="#3a3f46" style="cursor: text;">26,500 (-55.32%)</text><path d="M49.39423076923077,42.381818181818176 L59.39423076923077,42.381818181818176 L54.39423076923077,50.381818181818176 Z" fill="#8b9099"></path><text x="790.0480769230769" y="280.05018181818184" font-size="11" fill="#767b83" style="cursor: text;">최저</text><text x="819.0480769230769" y="280.05018181818184" font-size="11" fill="#3a3f46" style="cursor: text;">7,540 (+57.03%)</text><path d="M903.0480769230769,269.05018181818184 L913.0480769230769,269.05018181818184 L908.0480769230769,260.05018181818184 Z" fill="#8b9099"></path><path d="M973,201.5810909090909 l7,-9 h58 v18 h-58 z" fill="#e8382e"></path><text x="1011" y="205.5810909090909" font-size="11.5" font-weight="700" fill="#fff" text-anchor="middle" style="cursor: text;">11,840</text><text x="8" y="328" font-size="12" fill="#4a4f57" style="cursor: text;">거래량 5,317,950 <tspan fill="#c4c9cf">✕</tspan></text><text x="983" y="348.27272727272725" font-size="10.5" fill="#a3a8af" style="cursor: text;">10.00m</text><text x="983" y="369.6363636363636" font-size="10.5" fill="#a3a8af" style="cursor: text;">7.50m</text><text x="983" y="391" font-size="10.5" fill="#a3a8af" style="cursor: text;">5.00m</text><text x="983" y="412.3636363636364" font-size="10.5" fill="#a3a8af" style="cursor: text;">2.50m</text><rect x="11.525961538461537" y="399.98980940692127" width="11.50576923076923" height="28.010190593078736" fill="#e8382e"></rect><rect x="30.083653846153844" y="354.4" width="11.50576923076923" height="73.6" fill="#e8382e"></rect><rect x="48.64134615384615" y="348" width="11.50576923076923" height="80" fill="#e8382e"></rect><rect x="67.19903846153845" y="372" width="11.50576923076923" height="56" fill="#2679ed"></rect><rect x="85.75673076923077" y="378.6611317601055" width="11.50576923076923" height="49.33886823989451" fill="#2679ed"></rect><rect x="104.31442307692306" y="377.3460476882756" width="11.50576923076923" height="50.653952311724424" fill="#e8382e"></rect><rect x="122.87211538461538" y="376.2841515932232" width="11.50576923076923" height="51.715848406776786" fill="#2679ed"></rect><rect x="141.4298076923077" y="405.42244943231344" width="11.50576923076923" height="22.577550567686558" fill="#2679ed"></rect><rect x="159.9875" y="393.4168765824288" width="11.50576923076923" height="34.58312341757119" fill="#e8382e"></rect><rect x="178.54519230769233" y="394.4991033934057" width="11.50576923076923" height="33.500896606594324" fill="#2679ed"></rect><rect x="197.10288461538462" y="407.3715294469148" width="11.50576923076923" height="20.628470553085208" fill="#2679ed"></rect><rect x="215.66057692307692" y="392.840480864048" width="11.50576923076923" height="35.159519135951996" fill="#e8382e"></rect><rect x="234.21826923076924" y="395.11646655760705" width="11.50576923076923" height="32.883533442392945" fill="#2679ed"></rect><rect x="252.77596153846153" y="376.5521156825125" width="11.50576923076923" height="51.44788431748748" fill="#2679ed"></rect><rect x="271.33365384615377" y="381.9334807936102" width="11.50576923076923" height="46.066519206389785" fill="#e8382e"></rect><rect x="289.8913461538461" y="387.21404234319925" width="11.50576923076923" height="40.78595765680075" fill="#2679ed"></rect><rect x="308.4490384615384" y="395.4016424845904" width="11.50576923076923" height="32.59835751540959" fill="#2679ed"></rect><rect x="327.0067307692307" y="399.1059089116752" width="11.50576923076923" height="28.89409108832479" fill="#e8382e"></rect><rect x="345.56442307692305" y="403.2281862515956" width="11.50576923076923" height="24.771813748404384" fill="#2679ed"></rect><rect x="364.1221153846153" y="388.079428806901" width="11.50576923076923" height="39.92057119309902" fill="#2679ed"></rect><rect x="382.67980769230763" y="393.72038905881345" width="11.50576923076923" height="34.27961094118655" fill="#e8382e"></rect><rect x="401.23749999999995" y="414.87602301314473" width="11.50576923076923" height="13.123976986855268" fill="#2679ed"></rect><rect x="419.7951923076922" y="388.2783222887665" width="11.50576923076923" height="39.7216777112335" fill="#2679ed"></rect><rect x="438.35288461538454" y="392.99219178408384" width="11.50576923076923" height="35.00780821591616" fill="#e8382e"></rect><rect x="456.91057692307686" y="413.6867981534451" width="11.50576923076923" height="14.313201846554874" fill="#2679ed"></rect><rect x="475.4682692307692" y="392.5623424015939" width="11.50576923076923" height="35.437657598406076" fill="#2679ed"></rect><rect x="494.0259615384615" y="384" width="11.50576923076923" height="44" fill="#e8382e"></rect><rect x="512.5836538461539" y="384.6584870517254" width="11.50576923076923" height="43.34151294827461" fill="#2679ed"></rect><rect x="531.1413461538461" y="401.90186960063875" width="11.50576923076923" height="26.098130399361253" fill="#2679ed"></rect><rect x="549.6990384615385" y="382.3984123803675" width="11.50576923076923" height="45.60158761963248" fill="#e8382e"></rect><rect x="568.2567307692308" y="388.77975090779364" width="11.50576923076923" height="39.22024909220636" fill="#2679ed"></rect><rect x="586.8144230769232" y="413.8086097911" width="11.50576923076923" height="14.191390208899973" fill="#2679ed"></rect><rect x="605.3721153846154" y="412.360249472782" width="11.50576923076923" height="15.639750527217984" fill="#e8382e"></rect><rect x="623.9298076923077" y="394.0054430477321" width="11.50576923076923" height="33.994556952267885" fill="#2679ed"></rect><rect x="642.4875000000001" y="402.0134264547378" width="11.50576923076923" height="25.986573545262218" fill="#2679ed"></rect><rect x="661.0451923076923" y="378.43771724402905" width="11.50576923076923" height="49.562282755970955" fill="#e8382e"></rect><rect x="679.6028846153847" y="409.567905863747" width="11.50576923076923" height="18.432094136253" fill="#2679ed"></rect><rect x="698.160576923077" y="402.1760007031262" width="11.50576923076923" height="25.823999296873808" fill="#2679ed"></rect><rect x="716.7182692307692" y="389.0839000735432" width="11.50576923076923" height="38.91609992645681" fill="#e8382e"></rect><rect x="735.2759615384616" y="410.0387388691306" width="11.50576923076923" height="17.96126113086939" fill="#2679ed"></rect><rect x="753.8336538461539" y="413.49574217014015" width="11.50576923076923" height="14.504257829859851" fill="#2679ed"></rect><rect x="772.3913461538461" y="386.2123867534101" width="11.50576923076923" height="41.7876132465899" fill="#e8382e"></rect><rect x="790.9490384615385" y="400.55068294890225" width="11.50576923076923" height="27.449317051097754" fill="#2679ed"></rect><rect x="809.5067307692308" y="380" width="11.50576923076923" height="48" fill="#2679ed"></rect><rect x="828.064423076923" y="379.4941478725523" width="11.50576923076923" height="48.505852127447724" fill="#e8382e"></rect><rect x="846.6221153846154" y="378.44470411911607" width="11.50576923076923" height="49.55529588088393" fill="#2679ed"></rect><rect x="865.1798076923077" y="409.2875868026167" width="11.50576923076923" height="18.712413197383285" fill="#2679ed"></rect><rect x="883.7375000000001" y="408.9598769918084" width="11.50576923076923" height="19.040123008191582" fill="#e8382e"></rect><rect x="902.2951923076923" y="357.6" width="11.50576923076923" height="70.4" fill="#2679ed"></rect><rect x="920.8528846153846" y="407.5536111406982" width="11.50576923076923" height="20.446388859301805" fill="#e8382e"></rect><rect x="939.410576923077" y="396" width="11.50576923076923" height="32" fill="#e8382e"></rect><rect x="957.9682692307692" y="370.4" width="11.50576923076923" height="57.599999999999994" fill="#2679ed"></rect><text x="72.95192307692307" y="438" font-size="11.5" fill="#5a5f66" text-anchor="middle" font-weight="600" style="cursor: text;">9월</text><text x="165.7403846153846" y="438" font-size="11.5" fill="#5a5f66" text-anchor="middle" font-weight="600" style="cursor: text;">10월</text><text x="258.52884615384613" y="438" font-size="11.5" fill="#5a5f66" text-anchor="middle" font-weight="600" style="cursor: text;">11월</text><text x="332.75961538461536" y="438" font-size="11.5" fill="#5a5f66" text-anchor="middle" font-weight="600" style="cursor: text;">12월</text><text x="406.9903846153846" y="438" font-size="11.5" fill="#5a5f66" text-anchor="middle" font-weight="600" style="cursor: text;">2026</text><text x="499.77884615384613" y="438" font-size="11.5" fill="#5a5f66" text-anchor="middle" font-weight="600" style="cursor: text;">2월</text><text x="592.5673076923077" y="438" font-size="11.5" fill="#5a5f66" text-anchor="middle" font-weight="600" style="cursor: text;">3월</text><text x="666.7980769230769" y="438" font-size="11.5" fill="#5a5f66" text-anchor="middle" font-weight="600" style="cursor: text;">4월</text><text x="741.0288461538462" y="438" font-size="11.5" fill="#5a5f66" text-anchor="middle" font-weight="600" style="cursor: text;">5월</text><text x="833.8173076923076" y="438" font-size="11.5" fill="#5a5f66" text-anchor="middle" font-weight="600" style="cursor: text;">6월</text><text x="908.0480769230769" y="438" font-size="11.5" fill="#5a5f66" text-anchor="middle" font-weight="600" style="cursor: text;">7월</text></svg></div>
+    </div>
+
+    <div class="lower">
+      <div class="panel">
+        <h3>호가 <small>20분지연</small> <span class="prov">KRX 제공 ⓘ</span></h3>
+        <table class="dtbl">
+          <tbody><tr><th>매도잔량</th><th style="text-align:center">호가</th><th>매수잔량</th></tr>
+          <tr class="hoga-row"><td><div class="hoga-bar" style="width:22%"></div><span class="down">112</span></td><td class="mid down">11,880 <small style="color:#8b9099">-14.35%</small></td><td></td></tr>
+          <tr class="hoga-row"><td><div class="hoga-bar" style="width:26%"></div><span class="down">129</span></td><td class="mid down">11,870 <small style="color:#8b9099">-14.42%</small></td><td></td></tr>
+          <tr class="hoga-row"><td><div class="hoga-bar" style="width:41%"></div><span class="down">209</span></td><td class="mid down">11,860 <small style="color:#8b9099">-14.49%</small></td><td></td></tr>
+          <tr class="hoga-row"><td><div class="hoga-bar" style="width:33%"></div><span class="down">167</span></td><td class="mid down">11,850 <small style="color:#8b9099">-14.56%</small></td><td></td></tr>
+        </tbody></table>
+      </div>
+      <div class="panel">
+        <h3><span style="font-size:17px">시세</span> <span class="chip">시간별</span><span class="chip off">일별</span> <span class="prov">KRX 제공 ⓘ</span></h3>
+        <table class="dtbl">
+          <tbody><tr><th>체결시각</th><th>체결가</th><th>체결량</th><th>전일대비</th></tr>
+          <tr><td>15:30</td><td>11,840</td><td>8,654주</td><td class="down">▼2,030</td></tr>
+          <tr><td>15:19</td><td>11,850</td><td>1,186주</td><td class="down">▼2,020</td></tr>
+          <tr><td>15:18</td><td>11,830</td><td>1,022주</td><td class="down">▼2,040</td></tr>
+          <tr><td>15:17</td><td>11,860</td><td>3,410주</td><td class="down">▼2,010</td></tr>
+        </tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ RIGHT ============ -->
+  <div class="right">
+    <div class="rlist" id="rlist">
+ <div class="row">
+   <div class="ico" style="background:#00a05a">DS</div>
+   <div class="nm">대성건설기계</div>
+   <div class="pr"><div class="p">114,200</div><div class="c down">▼4,100(-3.47%)</div></div>
+ </div>
+ <div class="row">
+   <div class="ico" style="background:#1a3f8f">HW</div>
+   <div class="nm">한울로보틱스</div>
+   <div class="pr"><div class="p">55,400</div><div class="c down">▼2,100(-3.65%)</div></div>
+ </div>
+ <div class="row">
+   <div class="ico" style="background:#2e9e4f">SJ</div>
+   <div class="nm">서진엘리베이터</div>
+   <div class="pr"><div class="p">66,500</div><div class="c up">▲1,500(+2.31%)</div></div>
+ </div>
+ <div class="row">
+   <div class="ico" style="background:#111">RBX</div>
+   <div class="nm">로보넥스</div>
+   <div class="pr"><div class="p">158,400</div><div class="c down">▼15,000(-8.65%)</div></div>
+ </div>
+ <div class="row">
+   <div class="ico" style="background:#2e9e4f">TY</div>
+   <div class="nm">태양무벡스</div>
+   <div class="pr"><div class="p">19,350</div><div class="c down">▼4,100(-17.48%)</div></div>
+ </div>
+ <div class="row">
+   <div class="ico" style="background:#d32f2f">GS</div>
+   <div class="nm">금성벤드</div>
+   <div class="pr"><div class="p">26,150</div><div class="c up">▲1,150(+4.60%)</div></div>
+ </div>
+ <div class="row">
+   <div class="ico" style="background:#00a58c">HR</div>
+   <div class="nm">하람로봇</div>
+   <div class="pr"><div class="p">5,550</div><div class="c down">▼410(-6.88%)</div></div>
+ </div></div>
+    <button class="more">동일 업종 더보기</button>
+
+    <div class="adcard">
+      <span class="adm">AD</span>
+      <div class="img"><div class="ring"></div></div>
+      <div class="body">
+        <div class="brand">NOVA</div>
+        <div class="t1">환율은 올라도, 가격 부담은 OFF</div>
+        <div class="t2">완벽한 2세대 특별한 런칭 이벤트</div>
+        <div class="foot"><span class="n">NOVASONIC</span><span class="b">더 알아보기</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TICKER ============ -->
+<div class="ticker" id="ticker"><div class="ticker-track" style="animation-duration: 206.8s;"><div class="it"><span class="n">코스닥</span><span class="v">644.78</span><span class="down">▼ 17.90 (-2.70%)</span></div><div class="it"><span class="n">코스피 200</span><span class="v">872.49</span><span class="down">▼ 14.71 (-1.66%)</span></div><div class="it"><span class="n">다우존스</span><span class="v">51,594.14</span><span class="down">▼ 1,153.18 (-2.19%)</span></div><div class="it"><span class="n">S&amp;P 500</span><span class="v">7,316.15</span><span class="down">▼ 112.63 (-1.52%)</span></div><div class="it"><span class="n">미국 USD</span><span class="v">1,437.20</span><span class="down">▼ 8.80 (-0.61%)</span></div><div class="it"><span class="n">나스닥 종합</span><span class="v">24,442.94</span><span class="down">▼ 433.97 (-1.74%)</span></div><div class="it"><span class="n">국제 금</span><span class="v">4,057.60</span><span class="up">▲ 21.30 (+0.53%)</span></div><div class="it"><span class="n">코스닥</span><span class="v">644.78</span><span class="down">▼ 17.90 (-2.70%)</span></div><div class="it"><span class="n">코스피 200</span><span class="v">872.49</span><span class="down">▼ 14.71 (-1.66%)</span></div><div class="it"><span class="n">다우존스</span><span class="v">51,594.14</span><span class="down">▼ 1,153.18 (-2.19%)</span></div><div class="it"><span class="n">S&amp;P 500</span><span class="v">7,316.15</span><span class="down">▼ 112.63 (-1.52%)</span></div><div class="it"><span class="n">미국 USD</span><span class="v">1,437.20</span><span class="down">▼ 8.80 (-0.61%)</span></div><div class="it"><span class="n">나스닥 종합</span><span class="v">24,442.94</span><span class="down">▼ 433.97 (-1.74%)</span></div><div class="it"><span class="n">국제 금</span><span class="v">4,057.60</span><span class="up">▲ 21.30 (+0.53%)</span></div><div class="it"><span class="n">코스닥</span><span class="v">644.78</span><span class="down">▼ 17.90 (-2.70%)</span></div><div class="it"><span class="n">코스피 200</span><span class="v">872.49</span><span class="down">▼ 14.71 (-1.66%)</span></div><div class="it"><span class="n">다우존스</span><span class="v">51,594.14</span><span class="down">▼ 1,153.18 (-2.19%)</span></div><div class="it"><span class="n">S&amp;P 500</span><span class="v">7,316.15</span><span class="down">▼ 112.63 (-1.52%)</span></div><div class="it"><span class="n">미국 USD</span><span class="v">1,437.20</span><span class="down">▼ 8.80 (-0.61%)</span></div><div class="it"><span class="n">나스닥 종합</span><span class="v">24,442.94</span><span class="down">▼ 433.97 (-1.74%)</span></div><div class="it"><span class="n">국제 금</span><span class="v">4,057.60</span><span class="up">▲ 21.30 (+0.53%)</span></div><div class="it"><span class="n">코스닥</span><span class="v">644.78</span><span class="down">▼ 17.90 (-2.70%)</span></div><div class="it"><span class="n">코스피 200</span><span class="v">872.49</span><span class="down">▼ 14.71 (-1.66%)</span></div><div class="it"><span class="n">다우존스</span><span class="v">51,594.14</span><span class="down">▼ 1,153.18 (-2.19%)</span></div><div class="it"><span class="n">S&amp;P 500</span><span class="v">7,316.15</span><span class="down">▼ 112.63 (-1.52%)</span></div><div class="it"><span class="n">미국 USD</span><span class="v">1,437.20</span><span class="down">▼ 8.80 (-0.61%)</span></div><div class="it"><span class="n">나스닥 종합</span><span class="v">24,442.94</span><span class="down">▼ 433.97 (-1.74%)</span></div><div class="it"><span class="n">국제 금</span><span class="v">4,057.60</span><span class="up">▲ 21.30 (+0.53%)</span></div><div class="it"><span class="n">코스닥</span><span class="v">644.78</span><span class="down">▼ 17.90 (-2.70%)</span></div><div class="it"><span class="n">코스피 200</span><span class="v">872.49</span><span class="down">▼ 14.71 (-1.66%)</span></div><div class="it"><span class="n">다우존스</span><span class="v">51,594.14</span><span class="down">▼ 1,153.18 (-2.19%)</span></div><div class="it"><span class="n">S&amp;P 500</span><span class="v">7,316.15</span><span class="down">▼ 112.63 (-1.52%)</span></div><div class="it"><span class="n">미국 USD</span><span class="v">1,437.20</span><span class="down">▼ 8.80 (-0.61%)</span></div><div class="it"><span class="n">나스닥 종합</span><span class="v">24,442.94</span><span class="down">▼ 433.97 (-1.74%)</span></div><div class="it"><span class="n">국제 금</span><span class="v">4,057.60</span><span class="up">▲ 21.30 (+0.53%)</span></div><div class="it"><span class="n">코스닥</span><span class="v">644.78</span><span class="down">▼ 17.90 (-2.70%)</span></div><div class="it"><span class="n">코스피 200</span><span class="v">872.49</span><span class="down">▼ 14.71 (-1.66%)</span></div><div class="it"><span class="n">다우존스</span><span class="v">51,594.14</span><span class="down">▼ 1,153.18 (-2.19%)</span></div><div class="it"><span class="n">S&amp;P 500</span><span class="v">7,316.15</span><span class="down">▼ 112.63 (-1.52%)</span></div><div class="it"><span class="n">미국 USD</span><span class="v">1,437.20</span><span class="down">▼ 8.80 (-0.61%)</span></div><div class="it"><span class="n">나스닥 종합</span><span class="v">24,442.94</span><span class="down">▼ 433.97 (-1.74%)</span></div><div class="it"><span class="n">국제 금</span><span class="v">4,057.60</span><span class="up">▲ 21.30 (+0.53%)</span></div><div class="it"><span class="n">코스닥</span><span class="v">644.78</span><span class="down">▼ 17.90 (-2.70%)</span></div><div class="it"><span class="n">코스피 200</span><span class="v">872.49</span><span class="down">▼ 14.71 (-1.66%)</span></div><div class="it"><span class="n">다우존스</span><span class="v">51,594.14</span><span class="down">▼ 1,153.18 (-2.19%)</span></div><div class="it"><span class="n">S&amp;P 500</span><span class="v">7,316.15</span><span class="down">▼ 112.63 (-1.52%)</span></div><div class="it"><span class="n">미국 USD</span><span class="v">1,437.20</span><span class="down">▼ 8.80 (-0.61%)</span></div><div class="it"><span class="n">나스닥 종합</span><span class="v">24,442.94</span><span class="down">▼ 433.97 (-1.74%)</span></div><div class="it"><span class="n">국제 금</span><span class="v">4,057.60</span><span class="up">▲ 21.30 (+0.53%)</span></div><div class="it"><span class="n">코스닥</span><span class="v">644.78</span><span class="down">▼ 17.90 (-2.70%)</span></div><div class="it"><span class="n">코스피 200</span><span class="v">872.49</span><span class="down">▼ 14.71 (-1.66%)</span></div><div class="it"><span class="n">다우존스</span><span class="v">51,594.14</span><span class="down">▼ 1,153.18 (-2.19%)</span></div><div class="it"><span class="n">S&amp;P 500</span><span class="v">7,316.15</span><span class="down">▼ 112.63 (-1.52%)</span></div><div class="it"><span class="n">미국 USD</span><span class="v">1,437.20</span><span class="down">▼ 8.80 (-0.61%)</span></div><div class="it"><span class="n">나스닥 종합</span><span class="v">24,442.94</span><span class="down">▼ 433.97 (-1.74%)</span></div><div class="it"><span class="n">국제 금</span><span class="v">4,057.60</span><span class="up">▲ 21.30 (+0.53%)</span></div><div class="it"><span class="n">코스닥</span><span class="v">644.78</span><span class="down">▼ 17.90 (-2.70%)</span></div><div class="it"><span class="n">코스피 200</span><span class="v">872.49</span><span class="down">▼ 14.71 (-1.66%)</span></div><div class="it"><span class="n">다우존스</span><span class="v">51,594.14</span><span class="down">▼ 1,153.18 (-2.19%)</span></div><div class="it"><span class="n">S&amp;P 500</span><span class="v">7,316.15</span><span class="down">▼ 112.63 (-1.52%)</span></div><div class="it"><span class="n">미국 USD</span><span class="v">1,437.20</span><span class="down">▼ 8.80 (-0.61%)</span></div><div class="it"><span class="n">나스닥 종합</span><span class="v">24,442.94</span><span class="down">▼ 433.97 (-1.74%)</span></div><div class="it"><span class="n">국제 금</span><span class="v">4,057.60</span><span class="up">▲ 21.30 (+0.53%)</span></div><div class="it"><span class="n">코스닥</span><span class="v">644.78</span><span class="down">▼ 17.90 (-2.70%)</span></div><div class="it"><span class="n">코스피 200</span><span class="v">872.49</span><span class="down">▼ 14.71 (-1.66%)</span></div><div class="it"><span class="n">다우존스</span><span class="v">51,594.14</span><span class="down">▼ 1,153.18 (-2.19%)</span></div><div class="it"><span class="n">S&amp;P 500</span><span class="v">7,316.15</span><span class="down">▼ 112.63 (-1.52%)</span></div><div class="it"><span class="n">미국 USD</span><span class="v">1,437.20</span><span class="down">▼ 8.80 (-0.61%)</span></div><div class="it"><span class="n">나스닥 종합</span><span class="v">24,442.94</span><span class="down">▼ 433.97 (-1.74%)</span></div><div class="it"><span class="n">국제 금</span><span class="v">4,057.60</span><span class="up">▲ 21.30 (+0.53%)</span></div><div class="it"><span class="n">코스닥</span><span class="v">644.78</span><span class="down">▼ 17.90 (-2.70%)</span></div><div class="it"><span class="n">코스피 200</span><span class="v">872.49</span><span class="down">▼ 14.71 (-1.66%)</span></div><div class="it"><span class="n">다우존스</span><span class="v">51,594.14</span><span class="down">▼ 1,153.18 (-2.19%)</span></div><div class="it"><span class="n">S&amp;P 500</span><span class="v">7,316.15</span><span class="down">▼ 112.63 (-1.52%)</span></div><div class="it"><span class="n">미국 USD</span><span class="v">1,437.20</span><span class="down">▼ 8.80 (-0.61%)</span></div><div class="it"><span class="n">나스닥 종합</span><span class="v">24,442.94</span><span class="down">▼ 433.97 (-1.74%)</span></div><div class="it"><span class="n">국제 금</span><span class="v">4,057.60</span><span class="up">▲ 21.30 (+0.53%)</span></div><div class="it"><span class="n">코스닥</span><span class="v">644.78</span><span class="down">▼ 17.90 (-2.70%)</span></div><div class="it"><span class="n">코스피 200</span><span class="v">872.49</span><span class="down">▼ 14.71 (-1.66%)</span></div><div class="it"><span class="n">다우존스</span><span class="v">51,594.14</span><span class="down">▼ 1,153.18 (-2.19%)</span></div><div class="it"><span class="n">S&amp;P 500</span><span class="v">7,316.15</span><span class="down">▼ 112.63 (-1.52%)</span></div><div class="it"><span class="n">미국 USD</span><span class="v">1,437.20</span><span class="down">▼ 8.80 (-0.61%)</span></div><div class="it"><span class="n">나스닥 종합</span><span class="v">24,442.94</span><span class="down">▼ 433.97 (-1.74%)</span></div><div class="it"><span class="n">국제 금</span><span class="v">4,057.60</span><span class="up">▲ 21.30 (+0.53%)</span></div><div class="it"><span class="n">코스닥</span><span class="v">644.78</span><span class="down">▼ 17.90 (-2.70%)</span></div><div class="it"><span class="n">코스피 200</span><span class="v">872.49</span><span class="down">▼ 14.71 (-1.66%)</span></div><div class="it"><span class="n">다우존스</span><span class="v">51,594.14</span><span class="down">▼ 1,153.18 (-2.19%)</span></div><div class="it"><span class="n">S&amp;P 500</span><span class="v">7,316.15</span><span class="down">▼ 112.63 (-1.52%)</span></div><div class="it"><span class="n">미국 USD</span><span class="v">1,437.20</span><span class="down">▼ 8.80 (-0.61%)</span></div><div class="it"><span class="n">나스닥 종합</span><span class="v">24,442.94</span><span class="down">▼ 433.97 (-1.74%)</span></div><div class="it"><span class="n">국제 금</span><span class="v">4,057.60</span><span class="up">▲ 21.30 (+0.53%)</span></div><div class="it"><span class="n">코스닥</span><span class="v">644.78</span><span class="down">▼ 17.90 (-2.70%)</span></div><div class="it"><span class="n">코스피 200</span><span class="v">872.49</span><span class="down">▼ 14.71 (-1.66%)</span></div><div class="it"><span class="n">다우존스</span><span class="v">51,594.14</span><span class="down">▼ 1,153.18 (-2.19%)</span></div><div class="it"><span class="n">S&amp;P 500</span><span class="v">7,316.15</span><span class="down">▼ 112.63 (-1.52%)</span></div><div class="it"><span class="n">미국 USD</span><span class="v">1,437.20</span><span class="down">▼ 8.80 (-0.61%)</span></div><div class="it"><span class="n">나스닥 종합</span><span class="v">24,442.94</span><span class="down">▼ 433.97 (-1.74%)</span></div><div class="it"><span class="n">국제 금</span><span class="v">4,057.60</span><span class="up">▲ 21.30 (+0.53%)</span></div></div></div>
+
+<script>
+/* BAKED = 내보내기로 저장된 파일. 이미 그려진 내용을 덮어쓰지 않도록 생성기를 건너뛴다 */
+const BAKED = document.body.dataset.baked === '1';
+
+/* ---------- 우측 동일업종 리스트 (전부 가상 기업) ---------- */
+const peers=[
+ {n:"대성건설기계",p:"114,200",c:"▼4,100(-3.47%)",d:1,bg:"#00a05a",t:"DS"},
+ {n:"한울로보틱스",p:"55,400",c:"▼2,100(-3.65%)",d:1,bg:"#1a3f8f",t:"HW"},
+ {n:"서진엘리베이터",p:"66,500",c:"▲1,500(+2.31%)",d:0,bg:"#2e9e4f",t:"SJ"},
+ {n:"로보넥스",p:"158,400",c:"▼15,000(-8.65%)",d:1,bg:"#111",t:"RBX"},
+ {n:"태양무벡스",p:"19,350",c:"▼4,100(-17.48%)",d:1,bg:"#2e9e4f",t:"TY"},
+ {n:"금성벤드",p:"26,150",c:"▲1,150(+4.60%)",d:0,bg:"#d32f2f",t:"GS"},
+ {n:"하람로봇",p:"5,550",c:"▼410(-6.88%)",d:1,bg:"#00a58c",t:"HR"},
+];
+if(!BAKED) document.getElementById('rlist').innerHTML=peers.map(o=>`
+ <div class="row">
+   <div class="ico" style="background:${o.bg}">${o.t}</div>
+   <div class="nm">${o.n}</div>
+   <div class="pr"><div class="p">${o.p}</div><div class="c ${o.d?'down':'up'}">${o.c}</div></div>
+ </div>`).join('');
+
+/* ---------- 하단 지수 티커 ---------- */
+const idx=[
+ ["코스닥","644.78","▼ 17.90 (-2.70%)",1],
+ ["코스피 200","872.49","▼ 14.71 (-1.66%)",1],
+ ["다우존스","51,594.14","▼ 1,153.18 (-2.19%)",1],
+ ["S&P 500","7,316.15","▼ 112.63 (-1.52%)",1],
+ ["미국 USD","1,437.20","▼ 8.80 (-0.61%)",1],
+ ["나스닥 종합","24,442.94","▼ 433.97 (-1.74%)",1],
+ ["국제 금","4,057.60","▲ 21.30 (+0.53%)",0],
+];
+if(!BAKED)(function(){
+  const el=document.getElementById('ticker');
+  const one=idx.map(o=>
+    `<div class="it"><span class="n">${o[0]}</span><span class="v">${o[1]}</span><span class="${o[3]?'down':'up'}">${o[2]}</span></div>`).join('');
+
+  // 한 세트가 화면 너비보다 짧으면 끊겨 보이므로 채운 뒤, 그 묶음을 정확히 2배 복제 → -50% 이동 시 무한 루프
+  el.innerHTML=`<div class="ticker-track"><div class="ticker-set">${one}</div></div>`;
+  const track=el.firstElementChild, set=track.firstElementChild;
+  let reps=1;
+  while(set.offsetWidth*reps < el.offsetWidth && reps<12){reps++;}
+  const block=one.repeat(reps);
+  track.innerHTML=block+block;                      // 앞뒤 동일 → 이음새 없음
+  const half=track.scrollWidth/2;
+  track.style.animationDuration=(half/60).toFixed(1)+'s';   // 초당 60px 속도로 통일
+})();
+
+/* ---------- 캔들 차트 ---------- */
+if(!BAKED)(function(){
+  // 시드 난수
+  let s=20260812;
+  const rnd=()=>{s=(s*1664525+1013904223)%4294967296;return s/4294967296;};
+
+  // 추세 경로 (주봉 52개): 9월 고점 26,500에서 시작해 7월까지 계단식 우하향 → 11,840
+  const path=[24100,25100,25600,24800,23900,24200,23300,22500,22800,22000,
+              21300,21600,20800,20100,20400,19600,19000,19300,18500,17900,
+              18200,17400,16800,17100,16400,15800,16100,15400,14900,15200,
+              14600,14100,14400,13800,13300,13600,13100,12700,13000,12500,
+              12100,12400,12000,11600,11900,11500,11200,11400,11000,12300,
+              12690,11840];
+
+  const W=1085,H=310,VH=110,PADL=8,PADR=112,PADT=18;
+  const n=path.length, cw=(W-PADL-PADR)/n;
+
+  let candles=[],prev=path[0];
+  for(let i=0;i<n;i++){
+    const close=path[i], open=prev;
+    const amp=Math.abs(close-open)*0.55+close*0.035;
+    let high=Math.max(open,close)+amp*rnd();
+    let low=Math.min(open,close)-amp*rnd();
+    if(i===2){high=26500;}                             // 9월 고점 (52주 최고)
+    if(i===48){low=7540;}                              // 7월 투매 저점 (52주 최저)
+    if(i===51){high=14900;low=10950;}                  // 최근 주봉 (시 12,690 / 종 11,840)
+    candles.push({o:open,c:close,h:high,l:low,v:0.15+rnd()*0.5});
+    prev=close;
+  }
+  candles[1].v=0.92; candles[2].v=1.0; candles[3].v=0.7;
+  candles[26].v=0.55; candles[43].v=0.6; candles[48].v=0.88; candles[50].v=0.4; candles[51].v=0.72;
+
+  const closes=candles.map(d=>d.c);
+  const ma=p=>closes.map((_,i)=>i<p-1?null:closes.slice(i-p+1,i+1).reduce((a,b)=>a+b)/p);
+  const ma5=ma(5),ma20=ma(20),ma60=ma(30);
+
+  const hi=30000, lo=2500;
+  const y=v=>PADT+(hi-v)/(hi-lo)*(H-PADT-14);
+  const x=i=>PADL+cw*i+cw/2;
+
+  let g='';
+  // 가격 눈금
+  [30000,25000,20000,15000,10000,5000].forEach(v=>{
+    g+=`<line x1="${PADL}" y1="${y(v)}" x2="${W-PADR}" y2="${y(v)}" stroke="#f4f5f7"/>`;
+    g+=`<text x="${W-PADR+10}" y="${y(v)+4}" font-size="11" fill="#a3a8af">${v.toLocaleString()}</text>`;
+  });
+  // MA
+  const line=(arr,col)=>{
+    let d='',st=false;
+    arr.forEach((v,i)=>{if(v==null)return;d+=(st?'L':'M')+x(i)+' '+y(v).toFixed(1);st=true;});
+    return `<path d="${d}" fill="none" stroke="${col}" stroke-width="1.3"/>`;
+  };
+  g+=line(ma5,'#3fb96b')+line(ma20,'#e8382e')+line(ma60,'#e8a13a');
+  // 캔들
+  const bw=Math.max(3,cw*0.62);
+  candles.forEach((d,i)=>{
+    const up=d.c>=d.o, col=up?'#e8382e':'#2679ed';
+    const t=y(Math.max(d.o,d.c)),b=y(Math.min(d.o,d.c));
+    g+=`<line x1="${x(i)}" y1="${y(d.h)}" x2="${x(i)}" y2="${y(d.l)}" stroke="${col}" stroke-width="1"/>`;
+    g+=`<rect x="${x(i)-bw/2}" y="${t}" width="${bw}" height="${Math.max(1.5,b-t)}" fill="${col}"/>`;
+  });
+  // 최고 마커 (좌측 시작부) — 라벨을 오른쪽으로 뻗어 잘림 방지
+  g+=`<text x="${x(2)+12}" y="${y(26500)-15}" font-size="11" fill="#767b83">최고</text>`;
+  g+=`<text x="${x(2)+41}" y="${y(26500)-15}" font-size="11" fill="#3a3f46">26,500 (-55.32%)</text>`;
+  g+=`<path d="M${x(2)-5},${y(26500)-11} L${x(2)+5},${y(26500)-11} L${x(2)},${y(26500)-3} Z" fill="#8b9099"/>`;
+  // 최저 마커 (우측 투매 구간) — 라벨을 왼쪽으로 뻗음
+  g+=`<text x="${x(48)-118}" y="${y(7540)+35}" font-size="11" fill="#767b83">최저</text>`;
+  g+=`<text x="${x(48)-89}" y="${y(7540)+35}" font-size="11" fill="#3a3f46">7,540 (+57.03%)</text>`;
+  g+=`<path d="M${x(48)-5},${y(7540)+24} L${x(48)+5},${y(7540)+24} L${x(48)},${y(7540)+15} Z" fill="#8b9099"/>`;
+  // 현재가 태그
+  const cy=y(11840);
+  g+=`<path d="M${W-PADR},${cy} l7,-9 h58 v18 h-58 z" fill="#e8382e"/>`;
+  g+=`<text x="${W-PADR+38}" y="${cy+4}" font-size="11.5" font-weight="700" fill="#fff" text-anchor="middle">11,840</text>`;
+
+  // 거래량
+  const VT=H+16, vmax=1.05;
+  g+=`<text x="${PADL}" y="${VT+2}" font-size="12" fill="#4a4f57">거래량 5,317,950 <tspan fill="#c4c9cf">✕</tspan></text>`;
+  ['10.00m','7.50m','5.00m','2.50m'].forEach((t,k)=>{
+    const yy=VT+18+(k+0.2)*((VH-16)/4.4);
+    g+=`<text x="${W-PADR+10}" y="${yy}" font-size="10.5" fill="#a3a8af">${t}</text>`;
+  });
+  candles.forEach((d,i)=>{
+    const h=(d.v/vmax)*(VH-26), yy=VT+18+(VH-26-h);
+    g+=`<rect x="${x(i)-bw/2}" y="${yy}" width="${bw}" height="${h}" fill="${d.c>=d.o?'#e8382e':'#2679ed'}"/>`;
+  });
+  // 월 라벨
+  const months=[[3,'9월'],[8,'10월'],[13,'11월'],[17,'12월'],[21,'2026'],[26,'2월'],[31,'3월'],[35,'4월'],[39,'5월'],[44,'6월'],[48,'7월']];
+  months.forEach(([i,t])=>{g+=`<text x="${x(i)}" y="${VT+VH+2}" font-size="11.5" fill="#5a5f66" text-anchor="middle" font-weight="600">${t}</text>`;});
+
+  document.getElementById('chart').innerHTML =
+    `<svg viewBox="0 0 ${W} ${VT+VH+12}" width="100%" xmlns="http://www.w3.org/2000/svg" style="display:block;margin-top:-58px">${g}</svg>`;
+})();
+</script>
+
+<!-- ============ 인라인 편집기 ============ -->
+<script>
+(function(){
+  /* ---------- 1. 일반 텍스트를 편집 가능한 span으로 감싸기 ---------- */
+  const SVG_NS='http://www.w3.org/2000/svg';
+  function wrapTextNodes(){
+    const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{
+      acceptNode(n){
+        if(!n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        for(let p=n.parentNode;p&&p!==document.body;p=p.parentNode){
+          if(p.nodeType!==1) continue;
+          const tag=p.tagName.toUpperCase();
+          if(tag==='SCRIPT'||tag==='STYLE'||tag==='TITLE') return NodeFilter.FILTER_REJECT;
+          if(p.namespaceURI===SVG_NS) return NodeFilter.FILTER_REJECT;   // SVG는 별도 처리
+          if(p.hasAttribute('data-editor-ui')) return NodeFilter.FILTER_REJECT;
+          if(p.classList.contains('ed')) return NodeFilter.FILTER_REJECT;
+        }
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    const list=[]; while(walker.nextNode()) list.push(walker.currentNode);
+    list.forEach(n=>{
+      const s=document.createElement('span');
+      s.className='ed';
+      n.parentNode.replaceChild(s,n);
+      s.appendChild(n);
+    });
+    return list.length;
+  }
+
+  /* ---------- 2. SVG(차트) 라벨은 오버레이 입력창으로 편집 ---------- */
+  function editSvgText(t){
+    const r=t.getBoundingClientRect();
+    const inp=document.createElement('input');
+    inp.setAttribute('data-editor-ui','');
+    inp.value=t.textContent;
+    Object.assign(inp.style,{position:'fixed',left:(r.left-5)+'px',top:(r.top-4)+'px',
+      height:(r.height+8)+'px',width:Math.max(78,r.width+34)+'px',
+      font:'12px -apple-system,sans-serif',border:'1.5px solid #2679ed',borderRadius:'4px',
+      padding:'0 5px',zIndex:9999,background:'#fff',boxShadow:'0 2px 8px rgba(0,0,0,.14)'});
+    document.body.appendChild(inp);
+    inp.focus(); inp.select();
+    let cancelled=false;
+    const close=()=>{ if(!cancelled) t.textContent=inp.value; inp.remove(); };
+    inp.addEventListener('blur',close);
+    inp.addEventListener('keydown',e=>{
+      if(e.key==='Enter'){e.preventDefault();inp.blur();}
+      if(e.key==='Escape'){cancelled=true;inp.blur();}
+    });
+  }
+  function bindSvgText(){
+    const els=document.querySelectorAll('#chart svg text');
+    els.forEach(t=>{
+      if(t.dataset.bound) return;
+      t.dataset.bound='1';
+      t.style.cursor='text';
+      t.addEventListener('click',()=>{ if(document.body.classList.contains('editing')) editSvgText(t); });
+    });
+    return els.length;
+  }
+
+  /* ---------- 3. 편집 모드 on/off ---------- */
+  function setEditing(on){
+    document.body.classList.toggle('editing',on);
+    document.querySelectorAll('span.ed').forEach(s=>s.setAttribute('contenteditable',on?'true':'false'));
+    btnEdit.textContent = on ? '✓ 편집 중 (클릭해 종료)' : '✎ 편집 모드';
+    btnEdit.classList.toggle('on',on);
+  }
+
+  /* ---------- 4. 수정본 HTML 내보내기 ---------- */
+  function exportHTML(){
+    document.activeElement && document.activeElement.blur();
+    const root=document.documentElement.cloneNode(true);
+    root.querySelectorAll('[data-editor-ui]').forEach(n=>n.remove());          // 편집기 UI 제거
+    root.querySelectorAll('span.ed').forEach(s=>                              // span 되돌리기
+      s.replaceWith(document.createTextNode(s.textContent)));
+    root.querySelectorAll('[contenteditable]').forEach(n=>n.removeAttribute('contenteditable'));
+    root.querySelectorAll('#chart svg text[data-bound]').forEach(n=>n.removeAttribute('data-bound'));
+    const body=root.querySelector('body');
+    body.classList.remove('editing');
+    body.setAttribute('data-baked','1');                                      // 생성기 재실행 방지
+    const blob=new Blob(['<!DOCTYPE html>\n'+root.outerHTML],{type:'text/html;charset=utf-8'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='mpay-stock-edited.html';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+    toast('수정본 HTML을 다운로드했습니다');
+  }
+  function toast(msg){
+    const d=document.createElement('div');
+    d.setAttribute('data-editor-ui','');
+    d.className='ed-toast'; d.textContent=msg;
+    document.body.appendChild(d);
+    setTimeout(()=>d.remove(),2200);
+  }
+
+  /* ---------- 5. 툴바 (기본 숨김) ---------- */
+  const bar=document.createElement('div');
+  bar.setAttribute('data-editor-ui','');
+  bar.className='ed-bar';
+  bar.innerHTML='<button class="ed-btn" id="edToggle">✎ 편집 모드</button>'+
+                '<button class="ed-btn save" id="edSave">⤓ HTML로 저장</button>'+
+                '<button class="ed-btn close" id="edClose" title="툴바 숨기기">✕</button>';
+  document.body.appendChild(bar);
+  const btnEdit=bar.querySelector('#edToggle');
+  btnEdit.addEventListener('click',()=>setEditing(!document.body.classList.contains('editing')));
+  bar.querySelector('#edSave').addEventListener('click',exportHTML);
+  bar.querySelector('#edClose').addEventListener('click',()=>showBar(false));
+
+  function showBar(on){
+    bar.classList.toggle('open',on);
+    if(!on) setEditing(false);          // 숨기면 완전 읽기 전용으로 복귀
+  }
+
+  /* ---------- 6. 숨겨둔 호출 지점: 우측 하단 모서리 더블클릭 ---------- */
+  const hot=document.createElement('div');
+  hot.setAttribute('data-editor-ui','');
+  hot.className='ed-hotspot';
+  hot.title='';                          // 툴팁 없음 — 완전히 눈에 띄지 않게
+  hot.addEventListener('dblclick',()=>showBar(!bar.classList.contains('open')));
+  document.body.appendChild(hot);
+
+  const count=wrapTextNodes();
+  bindSvgText();
+  setEditing(false);                     // 기본값: 읽기 전용, 툴바 숨김
+  console.log('편집 가능 텍스트:',count,'개 + 차트 라벨 / 우측 하단 모서리 더블클릭 → 편집 툴바');
+})();
+</script>
+
+<style>
+.ed{border-radius:3px}
+body.editing .ed{cursor:text}
+body.editing .ed:hover{background:#eef4ff;box-shadow:0 0 0 1px #b8d0f7}
+body.editing .ed:focus{outline:none;background:#fff;box-shadow:0 0 0 1.6px #2679ed}
+body.editing #chart svg text:hover{fill:#2679ed !important;font-weight:700}
+/* 숨겨둔 호출 지점 — 우측 하단 모서리, 완전 투명 */
+.ed-hotspot{position:fixed;right:0;bottom:0;width:46px;height:46px;z-index:9997;
+  background:transparent;cursor:default}
+/* 툴바는 기본 숨김. .open 일 때만 등장 */
+.ed-bar{position:fixed;right:20px;bottom:48px;z-index:9998;display:flex;gap:8px;
+  opacity:0;visibility:hidden;pointer-events:none;transform:translateY(8px);
+  transition:opacity .16s ease,transform .16s ease}
+.ed-bar.open{opacity:1;visibility:visible;pointer-events:auto;transform:none}
+.ed-btn.close{padding:0;width:38px;font-size:14px;color:#8b9099}
+.ed-btn{height:38px;padding:0 16px;border-radius:19px;border:1px solid #d5d9de;background:#fff;
+  font-size:13px;font-weight:700;color:#3a3f46;cursor:pointer;
+  font-family:-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  box-shadow:0 3px 12px rgba(0,0,0,.12)}
+.ed-btn:hover{background:#f5f7f9}
+.ed-btn.on{background:#2679ed;border-color:#2679ed;color:#fff}
+.ed-btn.save{background:#111;border-color:#111;color:#fff}
+.ed-btn.save:hover{background:#333}
+.ed-toast{position:fixed;right:20px;bottom:96px;z-index:9999;background:#111;color:#fff;
+  font-size:13px;font-weight:600;padding:11px 16px;border-radius:8px;
+  font-family:-apple-system,"Apple SD Gothic Neo",sans-serif;box-shadow:0 4px 16px rgba(0,0,0,.2)}
+</style>
+
+
+</body></html>
